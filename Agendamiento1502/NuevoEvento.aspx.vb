@@ -5,12 +5,13 @@ Imports Google.Apis.Calendar.v3.Data
 Partial Class Nuevo_Evento
     Inherits System.Web.UI.Page
 
-
+    Dim ctrlGoogleCalendario As New GoogleCalendarControlador("primary")
+    Dim ctrlEvento As New ControladorEvento()
+    Dim ctrlCita As New ControladorCita()
+    Dim ctrlServRecursoLugar As New ControladorServicio_Recurso_Lugar()
 
     Protected Sub btnRegistrarEvento_Click(sender As Object, e As EventArgs) Handles btnRegistrarEvento.Click
-        Dim ctrlGoogleCalendario As New GoogleCalendarControlador("primary")
-        Dim ctrlEvento As New ControladorEvento()
-        Dim ctrlCita As New ControladorCita()
+
 
         Dim strNombre = txtNombreEvento.Text
         Dim strDescripcion = txtDescripcionEvento.Text
@@ -127,6 +128,11 @@ Partial Class Nuevo_Evento
             cargarSubCamposRepitenciaMeses(False)
         End If
         txtDatetimeInicio.Attributes.Item("min") = DateTime.Now()
+
+
+        Dim lstServicios = ctrlServRecursoLugar.obtenerServicios()
+
+        Session("lstServicios") = lstServicios
 
     End Sub
 

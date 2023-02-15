@@ -68,66 +68,7 @@
     </table>
 
  
-    <table class="tbl">  
-      <tr>  
-          <td colspan="2">  
-              <asp:Button ID="btnEnglish" runat="server" meta:resourceKey="btnEnglish"  
-                  />  
-              <asp:Button ID="btnSpanish" runat="server" meta:resourceKey="btnSpanish"  
-                   />  
-          </td>  
-      </tr>  
-      <tr>  
-          <td>  
-              <asp:Label ID="lblFirstName" runat="server"   
-              AssociatedControlID="txtFirstName" meta:resourceKey="lblFirstName"></asp:Label>  
-          </td>  
-          <td>  
-              <asp:TextBox ID="txtFirstName" runat="server" CssClass="textbox"  
-              meta:resourceKey="txtFirstName"></asp:TextBox>  
-          </td>  
-      </tr>  
-      <tr>  
-          <td>  
-              <asp:Label ID="lblLastName" runat="server"  
-              AssociatedControlID="txtLastName" meta:resourceKey="lblLastName"></asp:Label>  
-          </td>  
-          <td>  
-              <asp:TextBox ID="txtLastName" runat="server" CssClass="textbox"  
-              meta:resourceKey="txtLastName"></asp:TextBox>  
-          </td>  
-      </tr>  
-      <tr>  
-          <td>  
-              <asp:Label ID="lblMobile" runat="server"  
-              AssociatedControlID="txtMobile" meta:resourceKey="lblMobile"></asp:Label>  
-          </td>  
-          <td>  
-              <asp:TextBox ID="txtMobile" runat="server" CssClass="textbox"  
-              meta:resourceKey="txtMobile"></asp:TextBox>  
-          </td>  
-      </tr>  
-      <tr>  
-          <td>  
-              <asp:Label ID="lblOrganisation" runat="server"  
-              AssociatedControlID="txtOrganisation" meta:resourceKey="lblOrganisation"></asp:Label>  
-          </td>  
-          <td>  
-              <asp:TextBox ID="txtOrganisation" runat="server" CssClass="textbox"  
-              meta:resourceKey="txtOrganisation"></asp:TextBox>  
-          </td>  
-      </tr>  
-      <tr>  
-          <td valign="top">  
-              <asp:Label ID="lblAddress" runat="server"  
-              AssociatedControlID="txtAddress" meta:resourceKey="lblAddress"></asp:Label>  
-          </td>  
-          <td>  
-              <asp:TextBox ID="txtAddress" runat="server" TextMode="MultiLine"  
-              meta:resourceKey="txtAddress"></asp:TextBox>  
-          </td>  
-      </tr>  
-  </table> 
+   
     
 
 </asp:Content>

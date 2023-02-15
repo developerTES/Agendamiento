@@ -52,16 +52,7 @@ Public Partial Class SiteMaster
     End Sub
 
     Protected Sub Page_Load(sender As Object, e As EventArgs)
-        If Not Page.IsPostBack Then
 
-            Try
-                ddlLanguage.Items.FindByValue(Convert.ToString(Session("appCultureSession"))).Selected = True
-            Catch ex As Exception
-                ddlLanguage.Items.FindByValue("en-US").Selected = True
-            End Try
-
-
-        End If
     End Sub
 
 
@@ -69,8 +60,7 @@ Public Partial Class SiteMaster
     Protected Sub ddlLanguage_SelectedIndexChanged(sender As Object, e As EventArgs)
 
 
-        Session("appCultureSession") = ddlLanguage.SelectedItem.Value
-        Response.Redirect(Request.Url.ToString(), True)
+        
     End Sub
 
     Protected Sub Unnamed_LoggingOut(sender As Object, e As LoginCancelEventArgs)

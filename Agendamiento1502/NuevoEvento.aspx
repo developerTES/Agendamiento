@@ -1,7 +1,8 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" CodeFile="NuevoEvento.aspx.vb" Inherits="Nuevo_Evento" MasterPageFile="~/Site.master"  %>
 
+
 <asp:Content runat ="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
-   
+  
     <div>
         <asp:Label ID="Evento" runat="server" Text="Evento"></asp:Label>
     </div>
@@ -289,8 +290,21 @@
 
 
             <asp:Label ID="Label5" runat="server" Font-Bold="True" Font-Size="Large" Text="Servicios y Recursos"></asp:Label>
-            <asp:Panel ID="Panel1" runat="server"></asp:Panel>
+            <asp:Panel ID="Panel1" runat="server">
+
             
+
+
+               
+            </asp:Panel>
+
+
+            
+            <% For Each serv As Servicio In Session.Item("lstServicios")%>
+                
+            <h5> <%: serv.nom_servicio  %> </h5>
+
+             <%Next%>
 
 
         </div>

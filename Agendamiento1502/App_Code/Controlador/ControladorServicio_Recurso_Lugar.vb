@@ -148,6 +148,31 @@ Public Class ControladorServicio_Recurso_Lugar
         End Try
     End Function
 
+    Public Function obtenerServicios() As List(Of Servicio)
+        Dim lstServicios As New List(Of Servicio)
+        Try
+            conn.Open()
+            Dim strSQL = "SELECT * FROM SERVICIO"
+            Dim cmd = New SqlCommand(strSQL, conn)
+            Dim datareader = cmd.ExecuteReader()
+            While datareader.Read()
+                'Debug.WriteLine(datareader.GetInt32(0) & datareader.GetString(1) & datareader.GetString(2))
+                Dim serv = New Servicio(datareader.GetInt32(0), datareader.GetString(1), datareader.GetString(2))
+                lstServicios.Add(serv)
+
+            End While
+            conn.close()
+            For Each s In lstServicios
+                s.recursos = Me.obtenerRecursos(s.id)
+            Next
+            Return lstServicios
+
+        Catch ex As Exception
+            Debug.WriteLine("ERROR EN OBTENER servicios " & ex.Message)
+            Return Nothing
+        End Try
+    End Function
+
     Public Function obtenerLugar(ByVal _id As String) As Lugar
         Try
             conn.Open()

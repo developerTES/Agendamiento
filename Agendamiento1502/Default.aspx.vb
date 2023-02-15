@@ -45,17 +45,8 @@ Partial Class _Default
     End Sub
 
 
-    Protected Sub btn_Click(sender As Object, e As EventArgs) Handles btnEnglish.Click, btnSpanish.Click
-        Dim btn As Button = sender
-        Select Case btn.ID
-            Case ("btnEnglish")
-                Session("culture") = "en-US"
-                Response.Redirect(Request.Url.PathAndQuery, False)
+    Protected Sub btn_Click(sender As Object, e As EventArgs)
 
-            Case ("btnSpanish")
-                Session("culture") = "es-ES"
-                Response.Redirect(Request.Url.PathAndQuery, False)
-        End Select
 
     End Sub
 End Class
