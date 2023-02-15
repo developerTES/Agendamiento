@@ -301,9 +301,19 @@
 
             
             <% For Each serv As Servicio In Session.Item("lstServicios")%>
+             <hr />
+            <h3> <%: serv.nom_servicio  %> </h3>
+            <br />
+            
+            <hr />
+            <% For Each recurso As Recurso In serv.recursos %>
+            
+                <h5> <%: recurso.nom_Recurso   %> </h5>
+                <asp:CheckBox runat="server" />
+            
                 
-            <h5> <%: serv.nom_servicio  %> </h5>
-
+            <%Next%>
+            
              <%Next%>
 
 
