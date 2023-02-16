@@ -166,7 +166,7 @@ Public Class ControladorServicio_Recurso_Lugar
             End While
             conn.close()
             For Each s In lstServicios
-                s.recursos = Me.obtenerRecursos(s.id)
+                s.recursos = Me.obtenerRecursos(s.id_Servicio)
             Next
             Return lstServicios
 

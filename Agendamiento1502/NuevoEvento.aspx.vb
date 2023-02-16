@@ -1,4 +1,6 @@
 ﻿
+Imports System.Data
+Imports System.Data.SqlClient
 Imports System.Diagnostics
 Imports Google.Apis.Calendar.v3.Data
 
@@ -124,6 +126,11 @@ Partial Class Nuevo_Evento
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
+
+        If Not Me.IsPostBack Then
+            Me.BindRepeater()
+        End If
+
         'cargarCamposRepitencia(False)
         If cbRepitencia.Checked = True Then
             cargarCamposRepitencia(True)
@@ -155,8 +162,20 @@ Partial Class Nuevo_Evento
             'End If
         Next
 
+        'Dim ss As String = Await WebView1.InvokeScriptAsync("eval", New String() {"document.getElementById('userresponse').value;"})
+
+
+
     End Sub
 
+    Private Sub BindRepeater()
+
+        Dim servicios = ctrlServRecursoLugar.obtenerServicios
+        rptServicios.DataSource = servicios
+        rptServicios.DataBind()
+
+
+    End Sub
 
     Protected Sub cargarCamposNoRepitencia(ByVal estado As Boolean)
         'cbxlRepitencia.Items.FindByValue("No se repite").Selected = Not estado

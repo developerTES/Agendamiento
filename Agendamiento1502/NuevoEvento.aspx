@@ -301,64 +301,39 @@
                
             </asp:Panel>
 
-            <div class="accordion accordion-flush" id="accordionFlushExample">
-                <% For Each serv As Servicio In Session.Item("lstServicios")%>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="flush-headingOne">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse<%:serv.id %>" aria-expanded="false" aria-controls="flush-collapseOne">
-                            <h3><%: serv.nom_servicio  %> </h3>
-                        </button>
-                    </h2>
-                    <div id="flush-collapse<%:serv.id %>" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">
-                            
-                            <% For Each recurso As Recurso In serv.recursos %>
-
-                            <div class="container text-center">
-                                <div class="row align-items-start">
-                                    <div class="col">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="cb<%=serv.id %>_<%=recurso.nom_Recurso  %>" name="cb<%=serv.id %>_<%=recurso.id_recurso  %>"   >
-                                            <% Dim rec As String = recurso.nom_Recurso  %>
-                                        <h3><%:  rec   %> </h3>  <h5><%:  recurso.desc_recurso    %></h5>
-                                        </div>
-
-
-                                    </div>
-                                    <div class="col">
-                                        
-                                        
-                                        <input type="number" class="form-control" placeholder="Cantidad de recursos<%:recurso.nom_Recurso%>" id="txtCant<%=serv.id %>_<%=recurso.nom_Recurso  %>" name="txtCant<%=serv.id %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="col">
-                                        
-                                        <input type="text" class="form-control" placeholder="Cantidad de recursos<%:recurso.nom_Recurso%>" id="txtDesc<%=serv.id %>_<%=recurso.nom_Recurso  %>" name="txtDesc<%=serv.id %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1">
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-
-                            <%Next%>
-                        </div>
-                    </div>
-                </div>
-
-                <%Next%>
-
-                
-                
-            </div>
             
-           
 
+
+             <div class="accordion accordion-flush" id="accordionFlushExample">
+
+                 <asp:Repeater ID="rptServicios" runat="server">
+
+                     <ItemTemplate>
+                         <div class="accordion-item">
+                             <h2 class="accordion-header" id="flush-headingOne">
+                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse<%#Eval("ID_sERVICIO") %>" aria-expanded="false" aria-controls="flush-collapseOne">
+                                     <h3><%#Eval("nom_servicio") %> </h3>
+                                 </button>
+                             </h2>
+
+                             <div id="flush-collapse<%#Eval("ID_SERVICIO") %>" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                 <div class="accordion-body">
+                                 </div>
+                             </div>
+                         </div>
+                     </ItemTemplate>
+                     <FooterTemplate>
+                         </table>
+                     </FooterTemplate>
+                 </asp:Repeater>
+
+             </div>
 
         </div>
 
-     
-        
-        <br />
+
+
+    <br />
 
         <div>
 
