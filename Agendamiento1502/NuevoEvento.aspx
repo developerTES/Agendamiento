@@ -3,6 +3,7 @@
 
 <asp:Content runat ="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
   
+    
     <div>
         <asp:Label ID="Evento" runat="server" Text="Evento"></asp:Label>
     </div>
@@ -37,11 +38,11 @@
                     &nbsp;</td>
             </tr>
             <tr>
-                <td style="width: 198px" class="modal-sm"><span style="font-weight: bold">Nombre </span></td>
+                <td style="width: 198px" class="modal-sm"><span style="font-weight: bold"> <p class="h1">Nombre </p> </span></td>
                 <td style="width: 198px" class="modal-sm">&nbsp;</td>
                 <td style="width: 231px" class="modal-sm">&nbsp;</td>
                 <td class="modal-sm" colspan="4">
-                    <asp:TextBox ID="txtNombreEvento" runat="server" Width="244px"></asp:TextBox>
+                    <asp:TextBox ID="txtNombreEvento" runat="server" Width="244px" CssClass="form-control input-lg"></asp:TextBox>
                 </td>
                 <td style="width: 237px">
                     &nbsp;</td>
@@ -272,13 +273,15 @@
                     <asp:Button ID="btnAgregarInvitado" runat="server" CssClass="col-xs-offset-0" Text="Agregar Invitado" />
                 </td>
                 <td style="height: 20px">
-                        <asp:Button ID="btnRetirarSeleccionados" runat="server" Text="Retirar Seleccionados" CssClass="col-xs-offset-0" />
-                </td>
+                        &nbsp;</td>
             </tr>
             <tr>
                 <td class="modal-sm" style="width: 488px">&nbsp;</td>
                 <td style="width: 247px">&nbsp;</td>
-                <td colspan="2">&nbsp;</td>
+                <td>
+                        <asp:Button ID="btnRetirarSeleccionados" runat="server" Text="Retirar Seleccionados" CssClass="col-xs-offset-0" Width="159px" />
+                </td>
+                <td>&nbsp;</td>
             </tr>
         </table>
 
@@ -298,23 +301,57 @@
                
             </asp:Panel>
 
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <% For Each serv As Servicio In Session.Item("lstServicios")%>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse<%:serv.id %>" aria-expanded="false" aria-controls="flush-collapseOne">
+                            <h3><%: serv.nom_servicio  %> </h3>
+                        </button>
+                    </h2>
+                    <div id="flush-collapse<%:serv.id %>" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            
+                            <% For Each recurso As Recurso In serv.recursos %>
 
-            
-            <% For Each serv As Servicio In Session.Item("lstServicios")%>
-             <hr />
-            <h3> <%: serv.nom_servicio  %> </h3>
-            <br />
-            
-            <hr />
-            <% For Each recurso As Recurso In serv.recursos %>
-            
-                <h5> <%: recurso.nom_Recurso   %> </h5>
-                <asp:CheckBox runat="server" />
-            
+                            <div class="container text-center">
+                                <div class="row align-items-start">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="cb<%=serv.id %>_<%=recurso.nom_Recurso  %>" name="cb<%=serv.id %>_<%=recurso.id_recurso  %>"   >
+                                            <% Dim rec As String = recurso.nom_Recurso  %>
+                                        <h3><%:  rec   %> </h3>  <h5><%:  recurso.desc_recurso    %></h5>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col">
+                                        
+                                        
+                                        <input type="number" class="form-control" placeholder="Cantidad de recursos<%:recurso.nom_Recurso%>" id="txtCant<%=serv.id %>_<%=recurso.nom_Recurso  %>" name="txtCant<%=serv.id %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+                                    <div class="col">
+                                        
+                                        <input type="text" class="form-control" placeholder="Cantidad de recursos<%:recurso.nom_Recurso%>" id="txtDesc<%=serv.id %>_<%=recurso.nom_Recurso  %>" name="txtDesc<%=serv.id %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <%Next%>
+                        </div>
+                    </div>
+                </div>
+
+                <%Next%>
+
                 
-            <%Next%>
+                
+            </div>
             
-             <%Next%>
+           
 
 
         </div>
@@ -351,6 +388,6 @@
 
         </div>
 
-    
+   
 
 </asp:Content>

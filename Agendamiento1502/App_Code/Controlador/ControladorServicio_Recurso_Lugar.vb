@@ -12,9 +12,11 @@ Public Class ControladorServicio_Recurso_Lugar
     Public Function registrarNuevoServicio(servicio As String, email As String) As String
         Try
             conn.Open()
+            Dim idServicio As String = Regex.Replace(servicio, "[^A-Za-z0-9\-/]", "")
             Dim cmd As New SqlCommand With {.Connection = conn}
             cmd.CommandType = CommandType.StoredProcedure
             cmd.CommandText = "registrarServicio"
+            cmd.Parameters.AddWithValue("@EID_SERVICIO", idServicio)
             cmd.Parameters.AddWithValue("@ENOM_SERVICIO", servicio)
             cmd.Parameters.AddWithValue("@EEMAIL_SERVICIO", email)
             Dim rs = cmd.ExecuteNonQuery()
@@ -60,14 +62,15 @@ Public Class ControladorServicio_Recurso_Lugar
     Public Function obtenerRecursos(id_servicio As String) As List(Of Recurso)
 
         Dim recursos As New List(Of Recurso)
+        Debug.WriteLine("Obteniendo recursos de " & id_servicio)
         Try
             conn.Open()
-            Dim strSQL = "SELECT NOM_RECURSO as 'Nombre Recurso', DESCR_RECURSO as 'Descripción' FROM RECURSO WHERE ID_SERVICIO  = @EID_SERVICIO"
+            Dim strSQL = "SELECT ID_RECURSO as 'ID Recurso', NOM_RECURSO as 'Nombre Recurso', DESCR_RECURSO as 'Descripción' FROM RECURSO WHERE ID_SERVICIO  = @EID_SERVICIO"
             Dim cmd = New SqlCommand(strSQL, conn)
             cmd.Parameters.AddWithValue("@EID_SERVICIO", id_servicio)
             Dim datareader = cmd.ExecuteReader()
             While datareader.Read()
-                Dim recurso As New Recurso(datareader.GetValue(0), datareader.GetValue(1))
+                Dim recurso As New Recurso(datareader.GetValue(0), datareader.GetValue(1), datareader.GetValue(2))
                 recursos.Add(recurso)
 
             End While
@@ -100,7 +103,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
 
         Catch ex As Exception
-            Debug.WriteLine("Error en obtener recursos " + ex.Message)
+            Debug.WriteLine("Error en obtener Lugares " + ex.Message)
             Return Nothing
         End Try
     End Function
@@ -157,7 +160,7 @@ Public Class ControladorServicio_Recurso_Lugar
             Dim datareader = cmd.ExecuteReader()
             While datareader.Read()
                 'Debug.WriteLine(datareader.GetInt32(0) & datareader.GetString(1) & datareader.GetString(2))
-                Dim serv = New Servicio(datareader.GetInt32(0), datareader.GetString(1), datareader.GetString(2))
+                Dim serv = New Servicio(datareader.GetString(0), datareader.GetString(1), datareader.GetString(2))
                 lstServicios.Add(serv)
 
             End While

@@ -13,9 +13,15 @@ Partial Class Eventos
         Debug.WriteLine("SESSIONES ")
         Debug.WriteLine(Session("user"))
         Debug.WriteLine(Session("pwd"))
-        Dim listEventos_organizador = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ORGANIZADOR")
-        Dim listEventos_asistente = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ASISTENTE")
-        Dim listEventos_soporte = ctrlEventos.ListarEventosEmailTipo(Session("email"), "SOPORTE")
+        If Session("user") IsNot Nothing Then
+            'Response.Redirect("Eventos.aspx")
+            Dim listEventos_organizador = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ORGANIZADOR")
+            Dim listEventos_asistente = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ASISTENTE")
+            Dim listEventos_soporte = ctrlEventos.ListarEventosEmailTipo(Session("email"), "SOPORTE")
+        Else
+            Response.Redirect("Default")
+        End If
+
 
         ' Debug.WriteLine(Session("culture").ToString)
     End Sub

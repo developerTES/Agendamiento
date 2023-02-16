@@ -56,6 +56,7 @@ Partial Class Nuevo_Evento
                 Dim respuestas = ctrlCita.registrarCitasEventoRecurrente(evento)
                 Debug.WriteLine(respuesta)
                 Debug.WriteLine(respuestas)
+                Me.registrarRecursos()
             Else
                 Debug.WriteLine("No se pudo registrar el evento!!")
             End If
@@ -77,6 +78,7 @@ Partial Class Nuevo_Evento
             If respuesta IsNot Nothing Then
 
                 Debug.WriteLine(respuesta)
+                Me.registrarRecursos()
             Else
                 Debug.WriteLine("No se pudo registrar el evento!!")
             End If
@@ -91,6 +93,17 @@ Partial Class Nuevo_Evento
 
 
     End Sub
+
+    Private Sub registrarRecursos()
+        For Each control In Page.Controls
+            If TypeOf (control) Is CheckBox Then
+                Debug.WriteLine(control.ToString)
+            End If
+        Next
+    End Sub
+
+
+
     Protected Sub txtInvitado_TextChanged(sender As Object, e As EventArgs) Handles txtInvitado.TextChanged
 
 
@@ -133,6 +146,14 @@ Partial Class Nuevo_Evento
         Dim lstServicios = ctrlServRecursoLugar.obtenerServicios()
 
         Session("lstServicios") = lstServicios
+        Dim lst = Page.Request.Form
+
+        Debug.WriteLine("LIsta de controles checkbox")
+        For Each control In lst
+            'If TypeOf (control) Is CheckBox Then
+            Debug.WriteLine(control)
+            'End If
+        Next
 
     End Sub
 

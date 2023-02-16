@@ -22,6 +22,7 @@ Partial Class _Default
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         lblError.Text = Session("msg")
+        lblPath.Text = Session("email")
     End Sub
     Protected Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
 
