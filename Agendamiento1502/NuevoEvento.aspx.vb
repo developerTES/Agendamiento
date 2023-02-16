@@ -153,14 +153,27 @@ Partial Class Nuevo_Evento
         Dim lstServicios = ctrlServRecursoLugar.obtenerServicios()
 
         Session("lstServicios") = lstServicios
-        Dim lst = Page.Request.Form
 
-        Debug.WriteLine("LIsta de controles checkbox")
-        For Each control In lst
-            'If TypeOf (control) Is CheckBox Then
-            Debug.WriteLine(control)
-            'End If
+        Dim lstRecursosServicios As New List(Of String)
+
+        For Each control In Request.Form
+
+            If control.ToString.Substring(0, 7) = "txtCant" Or control.ToString.Substring(0, 7) = "txtDesc" Then
+                lstRecursosServicios.Add(control)
+            End If
         Next
+
+        For Each c In lstRecursosServicios
+            Debug.WriteLine(c)
+        Next
+
+        For Each d In lstRecursosServicios
+            Dim requerimiento = d.Split("_")
+
+        Next
+
+
+
 
         'Dim ss As String = Await WebView1.InvokeScriptAsync("eval", New String() {"document.getElementById('userresponse').value;"})
 
@@ -171,8 +184,7 @@ Partial Class Nuevo_Evento
     Private Sub BindRepeater()
 
         Dim servicios = ctrlServRecursoLugar.obtenerServicios
-        rptServicios.DataSource = servicios
-        rptServicios.DataBind()
+
 
 
     End Sub

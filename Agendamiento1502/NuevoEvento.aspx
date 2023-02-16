@@ -293,41 +293,62 @@
 
 
             <asp:Label ID="Label5" runat="server" Font-Bold="True" Font-Size="Large" Text="Servicios y Recursos"></asp:Label>
-            <asp:Panel ID="Panel1" runat="server">
+            <br />
+            <br />
 
-            
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <% For Each serv As Servicio In Session.Item("lstServicios")%>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse<%:serv.id_Servicio %>" aria-expanded="false" aria-controls="flush-collapseOne">
+                            <h3><%: serv.nom_servicio  %> </h3>
+                        </button>
+                    </h2>
+                    <div id="flush-collapse<%:serv.id_Servicio %>" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            
+                            <% For Each recurso As Recurso In serv.recursos %>
+
+                            <div class="container text-center">
+                                <div class="row align-items-start">
+                                    <div class="col">
+                                        <div class="form-check">
+
+                                            <input class="form-check-input form-control" type="checkbox" value="" id="cb<%=serv.id_Servicio %>_<%=recurso.nom_Recurso  %>" name="cb<%=serv.id_Servicio  %>_<%=recurso.id_recurso  %>"   >
+                                            <% Dim rec As String = recurso.nom_Recurso  %>
+                                        <h3><%:  rec   %> </h3>  <h5><%:  recurso.desc_recurso    %></h5>
+                                        </div>
 
 
-               
-            </asp:Panel>
+                                    </div>
+                                    <div class="col">
+                                        
+                                        
+                                         <input type="number" class="form-control" placeholder="Cantidad de recursos" id="txtCant_<%=serv.id_Servicio %>_<%=recurso.nom_Recurso  %>" name="txtCant_<%=serv.id_Servicio %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+                                    <div class="col">
+                                        
+                                       <input type="text" class="form-control" placeholder="Detalles" id="txtDesc_<%=serv.id_Servicio %>_<%=recurso.nom_Recurso  %>" name="txtDesc_<%=serv.id_Servicio %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1"> 
+                                    </div>
+                                </div>
+                            </div>
 
-            
+                            <br />
 
 
-             <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <%Next%>
+                        </div>
+                    </div>
+                </div>
 
-                 <asp:Repeater ID="rptServicios" runat="server">
+                <%Next%>
 
-                     <ItemTemplate>
-                         <div class="accordion-item">
-                             <h2 class="accordion-header" id="flush-headingOne">
-                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse<%#Eval("ID_sERVICIO") %>" aria-expanded="false" aria-controls="flush-collapseOne">
-                                     <h3><%#Eval("nom_servicio") %> </h3>
-                                 </button>
-                             </h2>
+                
+                
+            </div>
 
-                             <div id="flush-collapse<%#Eval("ID_SERVICIO") %>" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                                 <div class="accordion-body">
-                                 </div>
-                             </div>
-                         </div>
-                     </ItemTemplate>
-                     <FooterTemplate>
-                         </table>
-                     </FooterTemplate>
-                 </asp:Repeater>
 
-             </div>
+         
 
         </div>
 
