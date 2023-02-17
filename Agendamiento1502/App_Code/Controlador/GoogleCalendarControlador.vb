@@ -15,6 +15,7 @@ Public Class GoogleCalendarControlador
 
     Public Property calendarID As String
     Public Property service As CalendarService
+    Dim ctrlServLugarRec As New ControladorServicio_Recurso_Lugar()
 
     Public Sub New(strCalendarID As String)
         Me.calendarID = strCalendarID
@@ -112,8 +113,10 @@ Public Class GoogleCalendarControlador
 
     End Function
 
-    Public Function RegistrarEventoRecurrente(_evento As EventoGoogleCalendar, _horaInicio As String, _horaFin As String) As Data.Event
+    Public Function RegistrarEventoRecurrente(_evento As EventoGoogleCalendar, _horaInicio As String, _horaFin As String, _serviciosRequeridos As List(Of Servicio)) As Data.Event
+
         Dim ev = New Data.Event()
+        Dim strDescripcionServicios = ctrlServLugarRec.ConstruirDetalleRecursos(_serviciosRequeridos)
         Try
             Dim start1 = New DateTime()
             start1 = start1.AddYears(DateTime.Today.Year - 1)
@@ -138,7 +141,7 @@ Public Class GoogleCalendarControlador
             ev.Start = start
             ev.End = end_time
             ev.Summary = _evento.strName
-            ev.Description = _evento.strDescription
+            ev.Description = _evento.strDescription & strDescripcionServicios
             ev.Recurrence = _evento.lstRecurrenceRules
 
 
@@ -162,8 +165,10 @@ Public Class GoogleCalendarControlador
         End Try
     End Function
 
-    Public Function RegistrarEventoSimple(_evento As EventoGoogleCalendar) As Data.Event
+    Public Function RegistrarEventoSimple(_evento As EventoGoogleCalendar, _serviciosRequeridos As List(Of Servicio)) As Data.Event
         Dim ev = New Data.Event()
+        Dim strDescripcionServicios = ctrlServLugarRec.ConstruirDetalleRecursos(_serviciosRequeridos)
+
         Try
 
             Dim start = New EventDateTime()
@@ -180,7 +185,7 @@ Public Class GoogleCalendarControlador
             ev.Start = start
             ev.End = end_Date
             ev.Summary = _evento.strName
-            ev.Description = _evento.strDescription
+            ev.Description = _evento.strDescription & strDescripcionServicios
 
 
             ev.Attendees = _evento.lstInvitados

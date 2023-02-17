@@ -168,6 +168,18 @@ Public Class ControladorServicio_Recurso_Lugar
         End Try
     End Function
 
+    Public Function ConstruirDetalleRecursos(serviciosRequeridos As List(Of Servicio)) As String
+        Dim strDetalles = "<br><br><br><br><hr> SE REQUIEREN LOS SERVICIOS. "
+        For Each serv In serviciosRequeridos
+            strDetalles += "Servicio <strong> " & serv.nom_servicio & " </strong> <br>"
+            For Each rec In serv.recursos
+                strDetalles += rec.nom_Recurso & ": " + rec.detalles_recurso + "<br>"
+            Next
+            strDetalles += "<hr>"
+        Next
+        Return strDetalles
+    End Function
+
     Public Function obtenerEmailsServicio(idServ As String) As List(Of String)
         Dim lstEmails As New List(Of String)
         Try

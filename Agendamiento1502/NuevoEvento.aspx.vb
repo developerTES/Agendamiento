@@ -75,7 +75,7 @@ Partial Class Nuevo_Evento
 
 
             Dim eventoGoogleCal = New EventoGoogleCalendar(strNombre, strDescripcion, invitados, Reglas_Recurrencia)
-            Dim eventoGoogleCreado = ctrlGoogleCalendario.RegistrarEventoRecurrente(eventoGoogleCal, horaInicio, horaFin)
+            Dim eventoGoogleCreado = ctrlGoogleCalendario.RegistrarEventoRecurrente(eventoGoogleCal, horaInicio, horaFin, serviciosRequeridos)
             Dim evento As New Evento(eventoGoogleCreado.Id, Session("email"), strNombre, strLugarID, "REUNION", "ESRECURRENTE")
 
             respuesta = ctrlEvento.RegistrarEventoRecurrente(evento, lstAsistentes)
@@ -97,7 +97,7 @@ Partial Class Nuevo_Evento
 
 
             Dim eventoGoogleCal = New EventoGoogleCalendar(strNombre, strDescripcion, datetimeInicio, datetimeFin, invitados)
-            Dim eventoGoogleCreado = ctrlGoogleCalendario.RegistrarEventoSimple(eventoGoogleCal)
+            Dim eventoGoogleCreado = ctrlGoogleCalendario.RegistrarEventoSimple(eventoGoogleCal, serviciosRequeridos)
 
             Dim evento As New Evento(eventoGoogleCreado.Id, Session("email"), strNombre, strLugarID, "REUNION", "NORECURRENTE")
 
@@ -260,7 +260,7 @@ Partial Class Nuevo_Evento
 
             Dim miRec = ctrlServRecursoLugar.obtenerRecurso(servicioActual, idRec)
             Debug.WriteLine(" rec " & servicioActual & idRec & ": " & Request.Form(lstRecursosServicios(i)) & "DESC " & Request.Form(lstRecursosServicios(i + 1)))
-            miRec.setDetallesRecurso(Request.Form(lstRecursosServicios(i)).ToString & miRec.nom_Recurso & ". " & Request.Form(lstRecursosServicios(i + 1).ToString))
+            miRec.setDetallesRecurso(Request.Form(lstRecursosServicios(i)).ToString & ".  " & Request.Form(lstRecursosServicios(i + 1).ToString))
             r.Add(miRec)
 
 
