@@ -312,23 +312,29 @@
                             <div class="container text-center">
                                 <div class="row align-items-start">
                                     <div class="col">
-                                        <div class="form-check">
+                                        
 
-                                            <input class="form-check-input form-control" type="checkbox" value="" id="cb<%=serv.id_Servicio %>_<%=recurso.nom_Recurso  %>" name="cb<%=serv.id_Servicio  %>_<%=recurso.id_recurso  %>"   >
+                                            
                                             <% Dim rec As String = recurso.nom_Recurso  %>
                                         <h3><%:  rec   %> </h3>  <h5><%:  recurso.desc_recurso    %></h5>
-                                        </div>
+                                    
 
 
                                     </div>
                                     <div class="col">
                                         
                                         
-                                         <input type="number" class="form-control" placeholder="Cantidad de recursos" id="txtCant_<%=serv.id_Servicio %>_<%=recurso.nom_Recurso  %>" name="txtCant_<%=serv.id_Servicio %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1">
+                                         <input value="0" type="number" class="form-control" placeholder="Cantidad de recursos" id="txtCant_<%=serv.id_Servicio %>_<%=recurso.nom_Recurso  %>" name="txtCant_<%=serv.id_Servicio %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1"  size="10">
+                                        <small id="Cantidad" class="form-text text-muted align-content-center">
+                                                Cantidad requerida del recurso. Si no se requiere, el valor es cero.
+                                            </small> 
                                     </div>
                                     <div class="col">
                                         
                                        <input type="text" class="form-control" placeholder="Detalles" id="txtDesc_<%=serv.id_Servicio %>_<%=recurso.nom_Recurso  %>" name="txtDesc_<%=serv.id_Servicio %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1"> 
+                                        <small id="Descr" class="form-text text-muted">
+                                               
+                                            </small>
                                     </div>
                                 </div>
                             </div>

@@ -163,14 +163,51 @@ Partial Class Nuevo_Evento
             End If
         Next
 
-        For Each c In lstRecursosServicios
-            Debug.WriteLine(c)
-        Next
+        If (Page.IsPostBack) Then
+            Session("lstServicios") = lstServicios
+            Dim servicioActual = ""
+            'Dim lstServRecursos As New List(Of List(Of Recurso))
+            Dim lstServRecursos As New List(Of Servicio)
+            Dim s As New Servicio()
+            Dim r As New List(Of Recurso)
+            'lstServRecursos.Add(New List(Of String))
+            ' lstServRecursos.Add(New List(Of String))
+            For i As Integer = 0 To lstRecursosServicios.Count - 1 Step 2
+                Dim idServ = lstRecursosServicios(i).Split("_")(1)
+                Dim idRec = lstRecursosServicios(i + 1).Split("_")(2)
+                If servicioActual <> idServ Then
 
-        For Each d In lstRecursosServicios
-            Dim requerimiento = d.Split("_")
+                    If servicioActual <> "" Then
+                        s.recursos = r
+                        lstServRecursos.Add(s)
+                        r = New List(Of Recurso)
 
-        Next
+                    End If
+
+                    servicioActual = idServ
+
+                    s = ctrlServRecursoLugar.obtenerServicio(servicioActual)
+                    r.Add(ctrlServRecursoLugar.obtenerRecurso(servicioActual, idRec))
+                    Debug.WriteLine("SERVICIO")
+                    Debug.WriteLine(" rec " & servicioActual & idRec & ": " & Request.Form(lstRecursosServicios(i)) & "DESC " & Request.Form(lstRecursosServicios(i + 1)))
+                Else
+                    Debug.WriteLine(" rec " & servicioActual & idRec & ": " & Request.Form(lstRecursosServicios(i)) & "DESC " & Request.Form(lstRecursosServicios(i + 1)))
+                    r.Add(ctrlServRecursoLugar.obtenerRecurso(servicioActual, idRec))
+                End If
+
+
+
+
+                '
+            Next
+
+            For Each servicio In lstServicios
+                Debug.WriteLine("SERVICIO ------- " & servicio.nom_servicio)
+                For Each recurso In servicio.recursos
+                    Debug.WriteLine(recurso.nom_Recurso)
+                Next
+            Next
+        End If
 
 
 

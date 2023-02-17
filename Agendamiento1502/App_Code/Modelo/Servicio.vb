@@ -16,6 +16,10 @@ Public Class Servicio
 
     End Sub
 
+    Sub New()
+        Me.recursos = New List(Of Recurso)
+    End Sub
+
     Sub New(ByVal _id As String, ByVal nom_servicio As String, ByVal _email As String)
         Me.id_Servicio = _id
         Me.nom_servicio = nom_servicio

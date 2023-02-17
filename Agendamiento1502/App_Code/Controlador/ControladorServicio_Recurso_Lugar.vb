@@ -176,6 +176,52 @@ Public Class ControladorServicio_Recurso_Lugar
         End Try
     End Function
 
+    Public Function obtenerRecurso(idServ As String, idRec As String) As Recurso
+        Try
+            conn.Open()
+            Dim strSQL = "SELECT * FROM RECURSO WHERE ID_SERVICIO =@EID_SERVICIO AND ID_RECURSO =@EID_RECURSO"
+            Dim cmd = New SqlCommand(strSQL, conn)
+            cmd.Parameters.AddWithValue("@EID_SERVICIO", idServ)
+            cmd.Parameters.AddWithValue("@EID_RECURSO", idRec)
+            Dim datareader = cmd.ExecuteReader()
+            Dim bool = datareader.Read()
+            If bool Then
+                Dim r As New Recurso(datareader.GetValue(1), datareader.GetValue(2), datareader.GetValue(3))
+                conn.close()
+                Return r
+            Else
+                Return Nothing
+            End If
+
+        Catch ex As Exception
+            Debug.WriteLine("ERROR EN OBTENER single recurso " & ex.Message)
+            Return Nothing
+        End Try
+    End Function
+
+    Public Function obtenerServicio(ByVal idServ As String) As Servicio
+
+        Try
+            conn.Open()
+            Dim strSQL = "SELECT * FROM SERVICIO WHERE ID_SERVICIO =@EID_SERVICIO"
+            Dim cmd = New SqlCommand(strSQL, conn)
+            cmd.Parameters.AddWithValue("@EID_SERVICIO", idServ)
+            Dim datareader = cmd.ExecuteReader()
+            Dim bool = datareader.Read()
+            If bool Then
+                Dim S As New Servicio(datareader.GetValue(0), datareader.GetValue(1), datareader.GetValue(2))
+                conn.close()
+                Return S
+            Else
+                Return Nothing
+            End If
+
+        Catch ex As Exception
+            Debug.WriteLine("ERROR EN OBTENER single servicio " & ex.Message)
+            Return Nothing
+        End Try
+    End Function
+
     Public Function obtenerLugar(ByVal _id As String) As Lugar
         Try
             conn.Open()
