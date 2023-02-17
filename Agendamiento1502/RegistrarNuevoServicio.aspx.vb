@@ -2,12 +2,22 @@
 Partial Class RegistrarNuevoServicio
     Inherits System.Web.UI.Page
 
+
+    'Dim lstEmails As New Dictionary(Of String, String)
+
     Protected Sub btnNuevoServicio_Click(sender As Object, e As EventArgs) Handles btnNuevoServicio.Click
         Dim servicio = txtNuevoServicio.Text
-        Dim email = txtEmailServicio.Text
+        Dim emails As New List(Of String)
+        For Each lst As ListItem In cbxlResponsables.Items
+            If lst.Selected = True Then
+                emails.Add(lst.Text)
+
+            End If
+        Next
+
 
         Dim ctrlServicio_Recurso As New ControladorServicio_Recurso_Lugar
-        Dim msg = ctrlServicio_Recurso.registrarNuevoServicio(servicio, email)
+        Dim msg = ctrlServicio_Recurso.registrarNuevoServicio(servicio, emails)
         Dim msgbox = New clMensajes
         If msg IsNot Nothing Then
 
@@ -15,5 +25,34 @@ Partial Class RegistrarNuevoServicio
         Else
             Response.Write(MsgBox.Mensajes("No se pudo registrar el mensaje"))
         End If
+    End Sub
+    Protected Sub btnSeleccionar_Click(sender As Object, e As EventArgs) Handles btnSeleccionar.Click
+
+        Dim existe = False
+        For Each i In cbxlResponsables.Items
+            If i.Text = txtEmailServicio.Text Then
+                existe = True
+            End If
+        Next
+
+        If existe Then
+        Else
+            cbxlResponsables.Items.Add(txtEmailServicio.Text)
+            For Each i As ListItem In cbxlResponsables.Items
+                i.Selected = True
+            Next
+        End If
+
+
+
+
+
+
+
+    End Sub
+    Protected Sub cbxlResponsables_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxlResponsables.SelectedIndexChanged
+        'lstEmails = New List(Of String)
+
+
     End Sub
 End Class

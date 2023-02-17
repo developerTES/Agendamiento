@@ -125,6 +125,7 @@ Public Class ControladorEvento
         End Try
     End Function
 
+    Public Sub RegistrarEventoServicio(id_GOOGLE_UID As String, s As List(Of Servicio))
 
-
+    End Sub
 End Class

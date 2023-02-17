@@ -9,7 +9,7 @@ Public Class ControladorServicio_Recurso_Lugar
     Sub New()
 
     End Sub
-    Public Function registrarNuevoServicio(servicio As String, email As String) As String
+    Public Function registrarNuevoServicio(servicio As String, emails As List(Of String)) As String
         Try
             conn.Open()
             Dim idServicio As String = Regex.Replace(servicio, "[^A-Za-z0-9\-/]", "")
@@ -18,15 +18,13 @@ Public Class ControladorServicio_Recurso_Lugar
             cmd.CommandText = "registrarServicio"
             cmd.Parameters.AddWithValue("@EID_SERVICIO", idServicio)
             cmd.Parameters.AddWithValue("@ENOM_SERVICIO", servicio)
-            cmd.Parameters.AddWithValue("@EEMAIL_SERVICIO", email)
+            'cmd.Parameters.AddWithValue("@EEMAIL_SERVICIO", email)
             Dim rs = cmd.ExecuteNonQuery()
             Debug.WriteLine("Filas afectadas " & rs)
-            If rs > 0 Then
-                Return "Servicio agregado"
-            Else
-                Return Nothing
-            End If
             conn.close()
+            Dim msg = registrarIntegrantes(idServicio, emails)
+
+            Return msg
         Catch ex As Exception
             Debug.WriteLine("Error en nuevo servicio " & ex.Message)
 
@@ -34,7 +32,26 @@ Public Class ControladorServicio_Recurso_Lugar
         End Try
     End Function
 
+    Private Function registrarIntegrantes(idServicio As String, emails As List(Of String)) As String
+        Try
+            conn.Open()
 
+            For Each email In emails
+                Dim strSQL = "INSERT INTO INTEGRANTE VALUES (@EID_SERVICIO, @EID_INTEGRANTE)"
+                Dim cmd = New SqlCommand(strSQL, conn)
+                cmd.Parameters.AddWithValue("@EID_SERVICIO", idServicio)
+                cmd.Parameters.AddWithValue("@EID_INTEGRANTE", email)
+                cmd.ExecuteNonQuery()
+
+            Next
+
+
+            conn.close()
+            Return "Integrantes y servicio agregados !!"
+        Catch ex As Exception
+            Return "Error en registrarIntegrantes: " & ex.Message
+        End Try
+    End Function
 
     Public Function registrarNuevoRecurso(id_servicio As String, recurso As String, descripcion As Object) As String
         Try
@@ -151,6 +168,27 @@ Public Class ControladorServicio_Recurso_Lugar
         End Try
     End Function
 
+    Public Function obtenerEmailsServicio(idServ As String) As List(Of String)
+        Dim lstEmails As New List(Of String)
+        Try
+            conn.Open()
+            Dim strSQL = "SELECT * FROM INTEGRANTE WHERE ID_SERVICIO = @E_IDSERVICIO "
+            Dim cmd = New SqlCommand(strSQL, conn)
+            cmd.Parameters.AddWithValue("@E_IDSERVICIO", idServ)
+            Dim datareader = cmd.ExecuteReader()
+            While datareader.Read()
+                lstEmails.Add(datareader.GetString(1))
+            End While
+            conn.close()
+
+            Return lstEmails
+
+        Catch ex As Exception
+            Debug.WriteLine("ERROR EN OBTENER EMAILS X SERVICIO " & ex.Message)
+            Return Nothing
+        End Try
+    End Function
+
     Public Function obtenerServicios() As List(Of Servicio)
         Dim lstServicios As New List(Of Servicio)
         Try
@@ -160,7 +198,7 @@ Public Class ControladorServicio_Recurso_Lugar
             Dim datareader = cmd.ExecuteReader()
             While datareader.Read()
                 'Debug.WriteLine(datareader.GetInt32(0) & datareader.GetString(1) & datareader.GetString(2))
-                Dim serv = New Servicio(datareader.GetString(0), datareader.GetString(1), datareader.GetString(2))
+                Dim serv = New Servicio(datareader.GetString(0), datareader.GetString(1))
                 lstServicios.Add(serv)
 
             End While
@@ -208,11 +246,15 @@ Public Class ControladorServicio_Recurso_Lugar
             cmd.Parameters.AddWithValue("@EID_SERVICIO", idServ)
             Dim datareader = cmd.ExecuteReader()
             Dim bool = datareader.Read()
+
             If bool Then
-                Dim S As New Servicio(datareader.GetValue(0), datareader.GetValue(1), datareader.GetValue(2))
+                Dim S As New Servicio(datareader.GetValue(0), datareader.GetValue(1))
                 conn.close()
+                S.email_responsable = Me.obtenerEmailsServicio(idServ)
+
                 Return S
             Else
+                conn.close()
                 Return Nothing
             End If
 

@@ -4,14 +4,14 @@ Public Class Servicio
 
     Public Property id_Servicio As String
     Public Property nom_servicio As String
-    Public Property email_responsable As String
+    Public Property email_responsable As List(Of String)
     Public Property recursos As List(Of Recurso)
 
 
-    Sub New(ByVal _id As String, ByVal nom_servicio As String, ByVal _email As String, _recursos As List(Of Recurso))
-        Me.id_servicio = _id
+    Sub New(ByVal _id As String, ByVal nom_servicio As String, ByVal _emails As List(Of String), _recursos As List(Of Recurso))
+        Me.id_Servicio = _id
         Me.nom_servicio = nom_servicio
-        Me.email_responsable = _email
+        Me.email_responsable = _emails
         Me.recursos = _recursos
 
     End Sub
@@ -20,10 +20,10 @@ Public Class Servicio
         Me.recursos = New List(Of Recurso)
     End Sub
 
-    Sub New(ByVal _id As String, ByVal nom_servicio As String, ByVal _email As String)
+    Sub New(ByVal _id As String, ByVal nom_servicio As String)
         Me.id_Servicio = _id
         Me.nom_servicio = nom_servicio
-        Me.email_responsable = _email
+
 
 
     End Sub

@@ -23,12 +23,27 @@ Partial Class Nuevo_Evento
         Dim invitados As New List(Of EventAttendee)
         Dim lstAsistentes As New List(Of Asistente)
 
+
+
+        Dim serviciosRequeridos = Me.obtenerServiciosRequeridos()
         For Each inv In cbxlInvitados.Items
             Dim invitado As New EventAttendee()
             invitado.Email = inv.ToString
             invitados.Add(invitado)
             lstAsistentes.Add(New Asistente(inv.ToString))
         Next
+
+        For Each serv In serviciosRequeridos
+            For Each email_servicio In serv.email_responsable
+                Debug.WriteLine("ESTOY EN SERVICIOS, el email es" & email_servicio)
+                Dim invitado As New EventAttendee()
+                invitado.Email = email_servicio
+                invitados.Add(invitado)
+                lstAsistentes.Add(New Asistente(email_servicio))
+            Next
+
+        Next
+
 
         If cbRepitencia.Checked Then
             Dim strIntervalo = txtRepeticiones.Text
@@ -154,59 +169,10 @@ Partial Class Nuevo_Evento
 
         Session("lstServicios") = lstServicios
 
-        Dim lstRecursosServicios As New List(Of String)
 
-        For Each control In Request.Form
-
-            If control.ToString.Substring(0, 7) = "txtCant" Or control.ToString.Substring(0, 7) = "txtDesc" Then
-                lstRecursosServicios.Add(control)
-            End If
-        Next
 
         If (Page.IsPostBack) Then
-            Session("lstServicios") = lstServicios
-            Dim servicioActual = ""
-            'Dim lstServRecursos As New List(Of List(Of Recurso))
-            Dim lstServRecursos As New List(Of Servicio)
-            Dim s As New Servicio()
-            Dim r As New List(Of Recurso)
-            'lstServRecursos.Add(New List(Of String))
-            ' lstServRecursos.Add(New List(Of String))
-            For i As Integer = 0 To lstRecursosServicios.Count - 1 Step 2
-                Dim idServ = lstRecursosServicios(i).Split("_")(1)
-                Dim idRec = lstRecursosServicios(i + 1).Split("_")(2)
-                If servicioActual <> idServ Then
 
-                    If servicioActual <> "" Then
-                        s.recursos = r
-                        lstServRecursos.Add(s)
-                        r = New List(Of Recurso)
-
-                    End If
-
-                    servicioActual = idServ
-
-                    s = ctrlServRecursoLugar.obtenerServicio(servicioActual)
-                    r.Add(ctrlServRecursoLugar.obtenerRecurso(servicioActual, idRec))
-                    Debug.WriteLine("SERVICIO")
-                    Debug.WriteLine(" rec " & servicioActual & idRec & ": " & Request.Form(lstRecursosServicios(i)) & "DESC " & Request.Form(lstRecursosServicios(i + 1)))
-                Else
-                    Debug.WriteLine(" rec " & servicioActual & idRec & ": " & Request.Form(lstRecursosServicios(i)) & "DESC " & Request.Form(lstRecursosServicios(i + 1)))
-                    r.Add(ctrlServRecursoLugar.obtenerRecurso(servicioActual, idRec))
-                End If
-
-
-
-
-                '
-            Next
-
-            For Each servicio In lstServicios
-                Debug.WriteLine("SERVICIO ------- " & servicio.nom_servicio)
-                For Each recurso In servicio.recursos
-                    Debug.WriteLine(recurso.nom_Recurso)
-                Next
-            Next
         End If
 
 
@@ -225,6 +191,67 @@ Partial Class Nuevo_Evento
 
 
     End Sub
+
+    Private Function obtenerServiciosRequeridos() As List(Of Servicio)
+        'Session("lstServicios") = lstServicios
+        Dim servicioActual = ""
+        'Dim lstServRecursos As New List(Of List(Of Recurso))
+        Dim lstServRecursos As New List(Of Servicio)
+        Dim s As New Servicio()
+        Dim r As New List(Of Recurso)
+        'lstServRecursos.Add(New List(Of String))
+        ' lstServRecursos.Add(New List(Of String))
+
+        Dim lstRecursosServicios As New List(Of String)
+
+        For Each control In Request.Form
+
+            If control.ToString.Substring(0, 7) = "txtCant" Or control.ToString.Substring(0, 7) = "txtDesc" Then
+                lstRecursosServicios.Add(control)
+            End If
+        Next
+
+        For i As Integer = 0 To lstRecursosServicios.Count - 1 Step 2
+            Dim idServ = lstRecursosServicios(i).Split("_")(1)
+            Dim idRec = lstRecursosServicios(i + 1).Split("_")(2)
+            If servicioActual <> idServ Then
+
+                If servicioActual <> "" Then
+                    s.recursos = r
+                    lstServRecursos.Add(s)
+                    r = New List(Of Recurso)
+
+                End If
+
+                servicioActual = idServ
+                s = ctrlServRecursoLugar.obtenerServicio(servicioActual)
+                Debug.WriteLine("SERVICIO")
+
+            Else
+
+            End If
+
+
+            Dim miRec = ctrlServRecursoLugar.obtenerRecurso(servicioActual, idRec)
+            Debug.WriteLine(" rec " & servicioActual & idRec & ": " & Request.Form(lstRecursosServicios(i)) & "DESC " & Request.Form(lstRecursosServicios(i + 1)))
+            miRec.setDetallesRecurso(Request.Form(lstRecursosServicios(i)).ToString & miRec.nom_Recurso & ". " & Request.Form(lstRecursosServicios(i + 1).ToString))
+            r.Add(miRec)
+
+
+
+        Next
+        s.recursos = r
+        lstServRecursos.Add(s)
+        For Each servicio In lstServRecursos
+            Debug.WriteLine("SERVICIO ------- " & servicio.nom_servicio)
+            For Each recurso In servicio.recursos
+
+                Debug.WriteLine("DETALLES " + recurso.detalles_recurso)
+            Next
+        Next
+
+        Return lstServRecursos
+    End Function
 
     Protected Sub cargarCamposNoRepitencia(ByVal estado As Boolean)
         'cbxlRepitencia.Items.FindByValue("No se repite").Selected = Not estado

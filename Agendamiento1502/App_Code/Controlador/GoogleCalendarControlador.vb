@@ -264,4 +264,8 @@ Public Class GoogleCalendarControlador
         Next
         Return events.Items
     End Function
+
+    'Function addInvitadosServicios()
+    '   service.Events.Update()
+    'End Function
 End Class
