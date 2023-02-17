@@ -36,10 +36,20 @@ Partial Class Nuevo_Evento
         For Each serv In serviciosRequeridos
             For Each email_servicio In serv.email_responsable
                 Debug.WriteLine("ESTOY EN SERVICIOS, el email es" & email_servicio)
-                Dim invitado As New EventAttendee()
-                invitado.Email = email_servicio
-                invitados.Add(invitado)
-                lstAsistentes.Add(New Asistente(email_servicio))
+
+                'If lstAsistentes.Contains(New Asistente(email_servicio)) Then
+
+                If lstAsistentes.Exists(Function(asis) asis.email_asistente = email_servicio) Then
+                    Debug.WriteLine("Asistente repetido !!!!!!!")
+                Else
+                    Debug.WriteLine("Asistente no repetido !!!!!!!")
+                    Dim invitado As New EventAttendee()
+                    invitado.Email = email_servicio
+                    invitados.Add(invitado)
+                    lstAsistentes.Add(New Asistente(email_servicio))
+                End If
+
+
             Next
 
         Next
@@ -71,6 +81,7 @@ Partial Class Nuevo_Evento
             respuesta = ctrlEvento.RegistrarEventoRecurrente(evento, lstAsistentes)
             If respuesta IsNot Nothing Then
                 Dim respuestas = ctrlCita.registrarCitasEventoRecurrente(evento)
+
                 Debug.WriteLine(respuesta)
                 Debug.WriteLine(respuestas)
                 Me.registrarRecursos()
@@ -132,7 +143,22 @@ Partial Class Nuevo_Evento
     Protected Sub btnAgregarInvitado_Click(sender As Object, e As EventArgs) Handles btnAgregarInvitado.Click
         Dim strEmail = txtInvitado.Text
 
-        cbxlInvitados.Items.Add(strEmail)
+
+
+        Dim existe = False
+        For Each i In cbxlInvitados.Items
+            If i.Text = strEmail Then
+                existe = True
+            End If
+        Next
+
+        If existe Then
+        Else
+            cbxlInvitados.Items.Add(strEmail)
+            For Each i As ListItem In cbxlInvitados.Items
+                i.Selected = True
+            Next
+        End If
 
     End Sub
     Protected Sub btnRetirarSeleccionados_Click(sender As Object, e As EventArgs) Handles btnRetirarSeleccionados.Click
