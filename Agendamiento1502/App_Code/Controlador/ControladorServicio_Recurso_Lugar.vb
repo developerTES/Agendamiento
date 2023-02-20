@@ -129,12 +129,15 @@ Public Class ControladorServicio_Recurso_Lugar
         Try
             conn.Open()
             For Each s In serviciosRequeridos
-                Dim strSQL = "INSERT INTO EVENTO_SERVICIO VALUES (@EID_SERVICIO, @EID_EVENTO, @DESCR_SERVICIO)"
-                Dim cmd = New SqlCommand(strSQL, conn)
-                cmd.Parameters.AddWithValue("@EID_SERVICIO", s.id_Servicio)
-                cmd.Parameters.AddWithValue("@EID_EVENTO", ev.id_GoogleCalUID)
-                cmd.Parameters.AddWithValue("@DESCR_SERVICIO", s.ObtenerDetalle())
-                cmd.ExecuteNonQuery()
+                If s.ObtenerDetalle IsNot Nothing Then
+                    Dim strSQL = "INSERT INTO EVENTO_SERVICIO VALUES (@EID_SERVICIO, @EID_EVENTO, @DESCR_SERVICIO)"
+                    Dim cmd = New SqlCommand(strSQL, conn)
+                    cmd.Parameters.AddWithValue("@EID_SERVICIO", s.id_Servicio)
+                    cmd.Parameters.AddWithValue("@EID_EVENTO", ev.id_GoogleCalUID)
+                    cmd.Parameters.AddWithValue("@DESCR_SERVICIO", s.ObtenerDetalle())
+                    cmd.ExecuteNonQuery()
+                End If
+
 
             Next
             conn.close()
