@@ -165,6 +165,9 @@ Public Class GoogleCalendarControlador
         End Try
     End Function
 
+
+
+
     Public Function RegistrarEventoSimple(_evento As EventoGoogleCalendar, _serviciosRequeridos As List(Of Servicio)) As Data.Event
         Dim ev = New Data.Event()
         Dim strDescripcionServicios = ctrlServLugarRec.ConstruirDetalleRecursos(_serviciosRequeridos)

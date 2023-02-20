@@ -7,7 +7,7 @@ Imports Microsoft.VisualBasic
 Public Class ControladorEvento
 
     Dim conn = New Conexion().conn
-
+    Dim ctrlGoogleCalendar As New GoogleCalendarControlador("primary")
 
     Public Function RegistrarEventoSimple(evento As Evento, lstAsistentes As List(Of Asistente), cita As Cita) As String
         Try
@@ -94,38 +94,75 @@ Public Class ControladorEvento
         End Try
     End Function
 
-    Public Function ListarEventos()
-        Try
-            conn.Open()
-            Dim cmd As New SqlCommand With {.Connection = conn}
-            cmd.CommandType = CommandType.StoredProcedure
-            cmd.CommandText = "listarEventos"
-            Dim rs = cmd.ExecuteReader()
-            For Each row In rs
-                Debug.WriteLine(row(0))
-                Debug.WriteLine(row(1))
-            Next
-
-            Debug.WriteLine("Exito")
-        Catch ex As Exception
-            Debug.WriteLine("Error " & ex.Message)
-        End Try
-    End Function
 
     Public Function ListarEventosEmailTipo(ByVal email As String, ByVal tipo As String) As List(Of Evento)
+        Dim lst As New List(Of Evento)
+        Dim strSQL = ""
         Try
             conn.Open()
-            Debug.WriteLine("Dentro de liostar eventos")
-            conn.close()
+            Select Case tipo
+                Case "ORGANIZADOR"
+                    strSQL = "SELECT * FROM EVENTO as e, CITA as c WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND EMAIL_ORGANIZADOR = @EMAIL"
 
+                Case "ASISTENTE"
+                    strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_ASISTENTES as asis WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND e.ID_GOOGLEICALUID asis.ID_GOOGLEICALUID AND ID_ASISTENTE = @EMAIL"
+
+                Case "SOPORTE"
+                    strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_SERVICIO as e_s, INTEGRANTE AS i WHERE 
+                                e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND
+                                c.ID_GOOGLEICALUID = e_s.ID_GOOGLEICALUID AND 
+                                e_s.ID_SERVICIO = i.ID_SERVICIO AND 
+                                i.ID_INTEGRANTE  = @EMAIL"
+            End Select
+
+
+            Dim cmd = New SqlCommand(strSQL, conn)
+            cmd.Parameters.AddWithValue("@EMAIL", email)
+            Dim rs = cmd.ExecuteReader()
+
+            While rs.Read()
+                Dim google_CalUID = rs.GetValue(0)
+                Dim ev = Me.getEvento(google_CalUID)
+                lst.Add(ev)
+
+            End While
+            conn.close()
+            Return lst
 
         Catch ex As Exception
             Debug.WriteLine("ERROR EN LISTAR EVENTOS " & ex.Message)
-
+            Return Nothing
         End Try
     End Function
 
-    Public Sub RegistrarEventoServicio(id_GOOGLE_UID As String, s As List(Of Servicio))
 
-    End Sub
+
+    Function getEvento(google_CalUID As String) As Evento
+        Dim lstCitas As New List(Of Cita)
+        Dim lstOcurrences = ctrlGoogleCalendar.getCitasEvento(google_CalUID)
+        Dim ev As New Evento()
+        For Each ocurrence In lstOcurrences
+            Dim cita As New Cita(google_CalUID, 0, ocurrence.Start.Date, ocurrence.End.DateTime)
+            lstCitas.Add(cita)
+        Next
+
+        Try
+            'conn.Open()
+            Dim cmd = New SqlCommand("SELECT * FROM EVENT WHERE ID_GOOGLEICALUID=@ID", conn)
+            cmd.Parameters.AddWithValue("@ID", google_CalUID)
+            Dim rs = cmd.ExecuteReader()
+            While rs.Read()
+                ev = New Evento(rs.GetValue(0), rs.GetValue(1), rs.GetValue(2), rs.GetValue(3), rs.GetValue(4), rs.GetValue(5))
+            End While
+            'conn.close()
+            ev.evGoogle = lstOcurrences(0)
+            ev.citas = lstCitas
+        Catch ex As Exception
+            Debug.WriteLine("Error obteniendo evento " + ex.Message)
+            Return Nothing
+        End Try
+
+        Return ev
+
+    End Function
 End Class

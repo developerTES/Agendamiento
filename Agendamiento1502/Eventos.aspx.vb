@@ -3,7 +3,7 @@ Imports System.Diagnostics
 
 Partial Class Eventos
     Inherits System.Web.UI.Page
-    Dim ctrlEventos = New ControladorEvento()
+    Dim ctrlEventos As New ControladorEvento()
 
     Protected Sub gvEventos_SelectedIndexChanged(sender As Object, e As EventArgs) Handles gvEventos.SelectedIndexChanged
 
@@ -18,6 +18,9 @@ Partial Class Eventos
             Dim listEventos_organizador = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ORGANIZADOR")
             Dim listEventos_asistente = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ASISTENTE")
             Dim listEventos_soporte = ctrlEventos.ListarEventosEmailTipo(Session("email"), "SOPORTE")
+            Session("lst_org") = listEventos_organizador
+            Session("lst_asis") = listEventos_asistente
+            Session("lst_sop") = listEventos_soporte
         Else
             Response.Redirect("Default")
         End If
@@ -28,12 +31,7 @@ Partial Class Eventos
 
 
     Protected Sub btnListarEvento_Click(sender As Object, e As EventArgs) Handles btnListarEvento.Click
-        Dim ctrlGoogleCalendar = New GoogleCalendarControlador("primary")
 
-        'Dim listEventos = ctrlGoogleCalendar.ListarEventos()
-        Dim listEventos = ctrlEventos.ListarEventos()
-        gvEventos.DataSource = listEventos
-        gvEventos.DataBind()
 
     End Sub
 

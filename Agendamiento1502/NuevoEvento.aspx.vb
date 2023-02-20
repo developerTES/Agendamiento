@@ -11,7 +11,7 @@ Partial Class Nuevo_Evento
     Dim ctrlEvento As New ControladorEvento()
     Dim ctrlCita As New ControladorCita()
     Dim ctrlServRecursoLugar As New ControladorServicio_Recurso_Lugar()
-    Dim msg = New clMensajes()
+    Dim msg As New clMensajes()
 
     Protected Sub btnRegistrarEvento_Click(sender As Object, e As EventArgs) Handles btnRegistrarEvento.Click
 
@@ -97,8 +97,15 @@ Partial Class Nuevo_Evento
 
         Else
 
-            Dim datetimeInicio = DateTime.Parse(txtDatetimeInicio.Text)
-            Dim datetimeFin = DateTime.Parse(txtDatetimeFin.Text)
+            Dim datetimeinicio As New DateTime()
+            Dim datetimeFin As New DateTime()
+            Try
+                datetimeinicio = DateTime.Parse(txtDatetimeInicio.Text)
+                datetimeFin = DateTime.Parse(txtDatetimeFin.Text)
+            Catch ex As Exception
+                Response.Write(msg.Mensajes(("Ingrese una fecha válida!!" & respuesta)))
+            End Try
+
 
 
 
@@ -114,6 +121,8 @@ Partial Class Nuevo_Evento
                 Debug.WriteLine(respuesta)
                 Dim res = ctrlServRecursoLugar.registrarRecursosRequeridos(evento, serviciosRequeridos)
                 Response.Write(msg.Mensajes(respuesta))
+
+                'Response.Redirect("Eventos.aspx")
             Else
 
                 Response.Write(msg.Mensajes(("No se pudo registrar el evento!!" & respuesta)))
