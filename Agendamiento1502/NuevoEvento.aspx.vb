@@ -11,6 +11,7 @@ Partial Class Nuevo_Evento
     Dim ctrlEvento As New ControladorEvento()
     Dim ctrlCita As New ControladorCita()
     Dim ctrlServRecursoLugar As New ControladorServicio_Recurso_Lugar()
+    Dim msg = New clMensajes()
 
     Protected Sub btnRegistrarEvento_Click(sender As Object, e As EventArgs) Handles btnRegistrarEvento.Click
 
@@ -84,9 +85,14 @@ Partial Class Nuevo_Evento
 
                 Debug.WriteLine(respuesta)
                 Debug.WriteLine(respuestas)
-                Me.registrarRecursos()
+
+                respuesta += ctrlServRecursoLugar.registrarRecursosRequeridos(evento, serviciosRequeridos) & respuestas
+                Response.Write(msg.Mensajes(respuesta))
+                'Me.registrarRecursos(serviciosRequeridos)
             Else
-                Debug.WriteLine("No se pudo registrar el evento!!")
+                Response.Write(msg.Mensajes(("No se pudo registrar el evento!!" & respuesta)))
+                'msg.Mensajes("No se pudo registrar el evento!!")
+                'Debug.WriteLine("No se pudo registrar el evento!!")
             End If
 
         Else
@@ -106,9 +112,11 @@ Partial Class Nuevo_Evento
             If respuesta IsNot Nothing Then
 
                 Debug.WriteLine(respuesta)
-                Me.registrarRecursos()
+                Dim res = ctrlServRecursoLugar.registrarRecursosRequeridos(evento, serviciosRequeridos)
+                Response.Write(msg.Mensajes(respuesta))
             Else
-                Debug.WriteLine("No se pudo registrar el evento!!")
+
+                Response.Write(msg.Mensajes(("No se pudo registrar el evento!!" & respuesta)))
             End If
 
 
@@ -122,13 +130,6 @@ Partial Class Nuevo_Evento
 
     End Sub
 
-    Private Sub registrarRecursos()
-        For Each control In Page.Controls
-            If TypeOf (control) Is CheckBox Then
-                Debug.WriteLine(control.ToString)
-            End If
-        Next
-    End Sub
 
 
 

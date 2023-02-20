@@ -28,6 +28,11 @@ Public Class Servicio
 
     End Sub
 
-
-
+    Function ObtenerDetalle() As String
+        Dim detalle = ""
+        For Each r In recursos
+            detalle += r.nom_Recurso & ": " & r.detalles_recurso & ". "
+        Next
+        Return detalle
+    End Function
 End Class

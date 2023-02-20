@@ -125,6 +125,27 @@ Public Class ControladorServicio_Recurso_Lugar
         End Try
     End Function
 
+    Public Function registrarRecursosRequeridos(ev As Evento, serviciosRequeridos As List(Of Servicio)) As String
+        Try
+            conn.Open()
+            For Each s In serviciosRequeridos
+                Dim strSQL = "INSERT INTO EVENTO_SERVICIO VALUES (@EID_SERVICIO, @EID_EVENTO, @DESCR_SERVICIO)"
+                Dim cmd = New SqlCommand(strSQL, conn)
+                cmd.Parameters.AddWithValue("@EID_SERVICIO", s.id_Servicio)
+                cmd.Parameters.AddWithValue("@EID_EVENTO", ev.id_GoogleCalUID)
+                cmd.Parameters.AddWithValue("@DESCR_SERVICIO", s.ObtenerDetalle())
+                cmd.ExecuteNonQuery()
+
+            Next
+            conn.close()
+            Debug.WriteLine("Evento y recursos requeridos registrados exitosamente")
+            Return "Evento y recursos requeridos registrados exitosamente"
+        Catch ex As Exception
+            Debug.WriteLine("Error en registrar recursos requeridos " + ex.Message)
+            Return "Error en registrar recursos requeridos " + ex.Message
+        End Try
+    End Function
+
     Public Function registrarNuevoLugar(ByVal _lugar As Lugar) As String
         Try
             conn.Open()
