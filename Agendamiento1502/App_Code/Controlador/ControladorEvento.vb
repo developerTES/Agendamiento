@@ -103,17 +103,18 @@ Public Class ControladorEvento
             conn.Open()
             Select Case tipo
                 Case "ORGANIZADOR"
-                    strSQL = "SELECT * FROM EVENTO as e, CITA as c WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND EMAIL_ORGANIZADOR = @EMAIL ORDER BY c.DATE_INICIO "
+                    strSQL = "SELECT * FROM EVENTO as e, CITA as c WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND EMAIL_ORGANIZADOR = @EMAIL and c.date_inicio > GETDATE()  ORDER BY c.DATE_INICIO "
 
                 Case "ASISTENTE"
-                    strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_ASISTENTES as asis WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND e.ID_GOOGLEICALUID = asis.ID_GOOGLEICALUID AND ID_ASISTENTE = @EMAIL ORDER BY c.DATE_INICIO "
+                    strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_ASISTENTES as asis WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND e.ID_GOOGLEICALUID = asis.ID_GOOGLEICALUID AND ID_ASISTENTE = @EMAIL and c.date_inicio > GETDATE() ORDER BY c.DATE_INICIO "
 
                 Case "SOPORTE"
                     strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_SERVICIO as e_s, INTEGRANTE AS i WHERE 
                                 e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND
                                 c.ID_GOOGLEICALUID = e_s.ID_GOOGLEICALUID AND 
                                 e_s.ID_SERVICIO = i.ID_SERVICIO AND 
-                                i.ID_INTEGRANTE  = @EMAIL
+                                i.ID_INTEGRANTE  = @EMAIL AND
+                                c.date_inicio > GETDATE()
                                 ORDER BY c.DATE_INICIO "
             End Select
 

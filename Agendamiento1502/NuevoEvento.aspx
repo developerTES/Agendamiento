@@ -149,7 +149,7 @@
                     <asp:Label ID="lblRepetirCada" runat="server" Text="Repetir cada"></asp:Label>
                 </td>
                 <td style="width: 550px; height: 20px;">
-                    <asp:TextBox ID="txtRepeticiones" runat="server" TextMode="Number" Width="70px">1</asp:TextBox>
+                    <asp:TextBox ID="txtRepeticiones" runat="server" TextMode="Number" Width="70px" style="height: 22px" min="1">1</asp:TextBox>
                     <asp:DropDownList ID="ddlTipoRepitencia" runat="server" AutoPostBack ="true">
                         <asp:ListItem Selected="True">Días</asp:ListItem>
                         <asp:ListItem>Semanas</asp:ListItem>
@@ -211,7 +211,7 @@
                     <asp:Label ID="lblRepitencia2" runat="server" Text="Después de"></asp:Label>
                 </td>
                 <td style="height: 20px">
-                    <asp:TextBox ID="txtBoxNumVeces" runat="server" Height="22px" TextMode="Number" Width="51px"></asp:TextBox>
+                    <asp:TextBox ID="txtBoxNumVeces" runat="server" Height="22px" TextMode="Number" Width="51px" min="1" ></asp:TextBox>
                     <asp:Label ID="lblRepitencia3" runat="server" Text=" repeticiones"></asp:Label>
                 </td>
             </tr>
@@ -324,7 +324,7 @@
                                     <div class="col">
                                         
                                         
-                                         <input value="0" type="number" class="form-control" placeholder="Cantidad de recursos" id="txtCant_<%=serv.id_Servicio %>_<%=recurso.nom_Recurso  %>" name="txtCant_<%=serv.id_Servicio %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1"  size="10">
+                                         <input value="0" min="0" type="number" class="form-control" placeholder="Cantidad de recursos" id="txtCant_<%=serv.id_Servicio %>_<%=recurso.nom_Recurso  %>" name="txtCant_<%=serv.id_Servicio %>_<%=recurso.id_recurso   %>" aria-label="Username" aria-describedby="basic-addon1"  size="10">
                                         <small id="Cantidad" class="form-text text-muted align-content-center">
                                                 Cantidad requerida del recurso. Si no se requiere, el valor es cero.
                                             </small> 

@@ -207,6 +207,7 @@ Partial Class Nuevo_Evento
 
 
 
+
         If (Page.IsPostBack) Then
 
         End If
@@ -260,6 +261,7 @@ Partial Class Nuevo_Evento
                 End If
 
                 servicioActual = idServ
+
                 s = ctrlServRecursoLugar.obtenerServicio(servicioActual)
                 Debug.WriteLine("SERVICIO")
 
@@ -271,7 +273,12 @@ Partial Class Nuevo_Evento
             Dim miRec = ctrlServRecursoLugar.obtenerRecurso(servicioActual, idRec)
             Debug.WriteLine(" rec " & servicioActual & idRec & ": " & Request.Form(lstRecursosServicios(i)) & "DESC " & Request.Form(lstRecursosServicios(i + 1)))
             miRec.setDetallesRecurso(Request.Form(lstRecursosServicios(i)).ToString & ".  " & Request.Form(lstRecursosServicios(i + 1).ToString))
-            r.Add(miRec)
+            If Integer.Parse(Request.Form(lstRecursosServicios(i))) > 0 Then
+                r.Add(miRec)
+            Else
+                Debug.WriteLine("CANT Y DESCR VACIOS")
+            End If
+
 
 
 
@@ -395,39 +402,84 @@ Partial Class Nuevo_Evento
             'cbRepitenciaVeces.Checked = False
         End If
     End Sub
-    Protected Sub txtRepitenciaFechaFin_TextChanged(sender As Object, e As EventArgs) Handles txtRepitenciaFechaFin.TextChanged
 
-
-
-    End Sub
     Protected Sub txtHoraRepitenciaInicio_TextChanged(sender As Object, e As EventArgs) Handles txtHoraRepitenciaInicio.TextChanged
 
+        Try
+            Dim h_i = txtHoraRepitenciaInicio.Text
+            Dim h_f = txtHoraRepitenciaFin.Text
+            Debug.WriteLine(h_i)
+            Debug.WriteLine(h_f)
+            If h_i.CompareTo(h_f) > 0 Then
+                If h_i IsNot Nothing And h_f IsNot Nothing Then
+                    Response.Write(msg.Mensajes("La hora inicial no debe ser mayor a la hora final!"))
+                    txtHoraRepitenciaFin.Text = ""
+                End If
+
+            End If
+        Catch ex As Exception
+            Debug.WriteLine(ex.Message)
+        End Try
     End Sub
+    Protected Sub txtRepitenciaFechaFin_TextChanged(sender As Object, e As EventArgs) Handles txtRepitenciaFechaFin.TextChanged
+        Try
+            Dim h_i = txtHoraRepitenciaInicio.Text
+            Dim h_f = txtHoraRepitenciaFin.Text
+            Debug.WriteLine(h_i)
+            Debug.WriteLine(h_f)
+            If h_i.CompareTo(h_f) > 0 Then
+                If h_i IsNot Nothing And h_f IsNot Nothing Then
+                    Response.Write(msg.Mensajes("La hora inicial no debe ser mayor a la hora final!"))
+                    txtHoraRepitenciaFin.Text = ""
+                End If
+
+            End If
+        Catch ex As Exception
+            Debug.WriteLine(ex.Message)
+        End Try
+    End Sub
+
 
     Protected Sub txtDatetimeInicio_TextChanged(sender As Object, e As EventArgs) Handles txtDatetimeInicio.TextChanged
         Try
-            If Convert.ToDateTime(txtDatetimeInicio.Text) < DateTime.Now() Then
+            Dim d_inicio = Convert.ToDateTime(txtDatetimeInicio.Text)
+            Dim d_final = Convert.ToDateTime(txtDatetimeFin.Text)
+
+            If d_inicio.CompareTo(DateTime.Now().AddDays(1)) <> 1 Then
                 Dim msg = New clMensajes
-                msg.Mensajes("La fecha debe ser mayor a la actual")
-                MsgBox("La fecha debe ser mayor a la actual")
+
+                'Debug.WriteLine("Datetime es " & DateTime.Now().AddDays(1).ToString)
+                Response.Write(msg.Mensajes("La fecha debe ser superior a 24 horas!"))
+                txtDatetimeInicio.Text = DateTime.Now().AddDays(1)
             End If
         Catch ex As Exception
-
+            Debug.WriteLine(ex.Message)
         End Try
 
         Try
-            If Convert.ToDateTime(txtDatetimeInicio.Text) > Convert.ToDateTime(txtDatetimeFin.Text) Then
-                Dim msg = New clMensajes
-                msg.Mensajes("La fecha debe ser mayor a la actual")
-                MsgBox("La fecha Inicial debe ser mayor a la fecha final")
+            Dim d_inicio = Convert.ToDateTime(txtDatetimeInicio.Text)
+            Dim d_final = Convert.ToDateTime(txtDatetimeFin.Text)
+            If d_inicio.CompareTo(d_final) = 1 Then
+                Response.Write(msg.Mensajes("La fecha inicial debe ser superior a la fecha final!"))
+            End If
+        Catch ex As Exception
+            Debug.WriteLine(ex.Message)
+        End Try
+
+    End Sub
+
+    Protected Sub txtDatetimeFin_TextChanged(sender As Object, e As EventArgs) Handles txtDatetimeFin.TextChanged
+        Try
+            Dim d_inicio = Convert.ToDateTime(txtDatetimeInicio.Text)
+            Dim d_final = Convert.ToDateTime(txtDatetimeFin.Text)
+            If d_inicio.CompareTo(d_final) = 1 Then
+                Response.Write(msg.Mensajes("La fecha inicial debe ser superior a la fecha final!"))
             End If
         Catch ex As Exception
 
         End Try
     End Sub
-    Protected Sub txtDatetimeFin_TextChanged(sender As Object, e As EventArgs) Handles txtDatetimeFin.TextChanged
 
-    End Sub
 End Class
 
 
