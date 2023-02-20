@@ -97,22 +97,24 @@ Public Class ControladorEvento
 
     Public Function ListarEventosEmailTipo(ByVal email As String, ByVal tipo As String) As List(Of Evento)
         Dim lst As New List(Of Evento)
+        Dim lstStr As New List(Of String)
         Dim strSQL = ""
         Try
             conn.Open()
             Select Case tipo
                 Case "ORGANIZADOR"
-                    strSQL = "SELECT * FROM EVENTO as e, CITA as c WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND EMAIL_ORGANIZADOR = @EMAIL"
+                    strSQL = "SELECT * FROM EVENTO as e, CITA as c WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND EMAIL_ORGANIZADOR = @EMAIL ORDER BY c.DATE_INICIO "
 
                 Case "ASISTENTE"
-                    strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_ASISTENTES as asis WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND e.ID_GOOGLEICALUID asis.ID_GOOGLEICALUID AND ID_ASISTENTE = @EMAIL"
+                    strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_ASISTENTES as asis WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND e.ID_GOOGLEICALUID asis.ID_GOOGLEICALUID AND ID_ASISTENTE = @EMAIL ORDER BY c.DATE_INICIO "
 
                 Case "SOPORTE"
                     strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_SERVICIO as e_s, INTEGRANTE AS i WHERE 
                                 e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND
                                 c.ID_GOOGLEICALUID = e_s.ID_GOOGLEICALUID AND 
                                 e_s.ID_SERVICIO = i.ID_SERVICIO AND 
-                                i.ID_INTEGRANTE  = @EMAIL"
+                                i.ID_INTEGRANTE  = @EMAIL
+                                ORDER BY c.DATE_INICIO "
             End Select
 
 
@@ -122,11 +124,16 @@ Public Class ControladorEvento
 
             While rs.Read()
                 Dim google_CalUID = rs.GetValue(0)
-                Dim ev = Me.getEvento(google_CalUID)
-                lst.Add(ev)
+
+                lstStr.Add(google_CalUID)
 
             End While
             conn.close()
+
+            For Each id In lstStr
+                Dim ev = Me.getEvento(id)
+                lst.Add(ev)
+            Next
             Return lst
 
         Catch ex As Exception
@@ -147,15 +154,17 @@ Public Class ControladorEvento
         Next
 
         Try
-            'conn.Open()
-            Dim cmd = New SqlCommand("SELECT * FROM EVENT WHERE ID_GOOGLEICALUID=@ID", conn)
+            conn.Open()
+            Dim cmd = New SqlCommand("SELECT * FROM EVENTO WHERE ID_GOOGLEICALUID=@ID", conn)
             cmd.Parameters.AddWithValue("@ID", google_CalUID)
             Dim rs = cmd.ExecuteReader()
+
             While rs.Read()
-                ev = New Evento(rs.GetValue(0), rs.GetValue(1), rs.GetValue(2), rs.GetValue(3), rs.GetValue(4), rs.GetValue(5))
+                ev = New Evento(rs.GetValue(0), rs.GetValue(2), rs.GetValue(3), rs.GetValue(1), rs.GetValue(4), rs.GetValue(5))
             End While
-            'conn.close()
-            ev.evGoogle = lstOcurrences(0)
+            conn.close()
+            Debug.WriteLine("CONEXION CERRADA cantidad de citas ocurrences " + lstOcurrences.Count.ToString)
+            ev.evGoogle = ctrlGoogleCalendar.getEvento(google_CalUID)
             ev.citas = lstCitas
         Catch ex As Exception
             Debug.WriteLine("Error obteniendo evento " + ex.Message)

@@ -262,15 +262,25 @@ Public Class GoogleCalendarControlador
     Function getCitasEvento(id_GoogleCalUID As String) As List(Of Data.Event)
         'Dim events = service.Events.Instances("primary", id_GoogleCalUID).Execute()
         Dim request = service.Events.Instances("primary", id_GoogleCalUID)
+        'Dim request = service.Events.List("primary")
         request.PageToken = Nothing
+        'Dim events = request.Execute()
         Dim events = request.Execute()
         Debug.WriteLine("OBTENER EVENTOS DEL EVENTO RECURRENTE CREADO : " & id_GoogleCalUID)
 
         For Each ev In events.Items
+
             Debug.WriteLine(ev.Id)
             Debug.WriteLine(ev.Start)
         Next
         Return events.Items
+    End Function
+
+
+    Function getEvento(id_GoogleCalUID As String) As Data.Event
+        Dim request = service.Events.Get(calendarID, id_GoogleCalUID)
+        Dim ev = request.Execute()
+        Return ev
     End Function
 
     'Function addInvitadosServicios()
