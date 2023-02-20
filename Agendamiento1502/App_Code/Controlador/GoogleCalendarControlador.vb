@@ -271,7 +271,7 @@ Public Class GoogleCalendarControlador
         For Each ev In events.Items
 
             Debug.WriteLine(ev.Id)
-            Debug.WriteLine(ev.Start)
+            Debug.WriteLine(ev.Start.DateTime)
         Next
         Return events.Items
     End Function

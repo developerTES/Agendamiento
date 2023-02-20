@@ -16,11 +16,11 @@ Partial Class Eventos
         If Session("user") IsNot Nothing Then
             'Response.Redirect("Eventos.aspx")
             Dim listEventos_organizador = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ORGANIZADOR")
-            'Dim listEventos_asistente = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ASISTENTE")
-            'Dim listEventos_soporte = ctrlEventos.ListarEventosEmailTipo(Session("email"), "SOPORTE")
+            Dim listEventos_asistente = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ASISTENTE")
+            Dim listEventos_soporte = ctrlEventos.ListarEventosEmailTipo(Session("email"), "SOPORTE")
             Session("lst_org") = listEventos_organizador
-            'Session("lst_asis") = listEventos_asistente
-            'Session("lst_sop") = listEventos_soporte
+            Session("lst_asis") = listEventos_asistente
+            Session("lst_sop") = listEventos_soporte
         Else
             Response.Redirect("Default")
         End If

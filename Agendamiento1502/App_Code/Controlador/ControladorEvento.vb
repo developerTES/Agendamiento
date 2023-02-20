@@ -106,7 +106,7 @@ Public Class ControladorEvento
                     strSQL = "SELECT * FROM EVENTO as e, CITA as c WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND EMAIL_ORGANIZADOR = @EMAIL ORDER BY c.DATE_INICIO "
 
                 Case "ASISTENTE"
-                    strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_ASISTENTES as asis WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND e.ID_GOOGLEICALUID asis.ID_GOOGLEICALUID AND ID_ASISTENTE = @EMAIL ORDER BY c.DATE_INICIO "
+                    strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_ASISTENTES as asis WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND e.ID_GOOGLEICALUID = asis.ID_GOOGLEICALUID AND ID_ASISTENTE = @EMAIL ORDER BY c.DATE_INICIO "
 
                 Case "SOPORTE"
                     strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_SERVICIO as e_s, INTEGRANTE AS i WHERE 
@@ -137,7 +137,7 @@ Public Class ControladorEvento
             Return lst
 
         Catch ex As Exception
-            Debug.WriteLine("ERROR EN LISTAR EVENTOS " & ex.Message)
+            Debug.WriteLine("ERROR EN LISTAR EVENTOS " & ex.Message & ex.StackTrace)
             Return Nothing
         End Try
     End Function
@@ -148,8 +148,12 @@ Public Class ControladorEvento
         Dim lstCitas As New List(Of Cita)
         Dim lstOcurrences = ctrlGoogleCalendar.getCitasEvento(google_CalUID)
         Dim ev As New Evento()
+
+
+
         For Each ocurrence In lstOcurrences
-            Dim cita As New Cita(google_CalUID, 0, ocurrence.Start.Date, ocurrence.End.DateTime)
+
+            Dim cita As New Cita(google_CalUID, "", ocurrence.Start.DateTime, ocurrence.End.DateTime)
             lstCitas.Add(cita)
         Next
 
