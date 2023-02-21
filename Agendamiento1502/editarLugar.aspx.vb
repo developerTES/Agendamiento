@@ -36,6 +36,7 @@ Partial Class editarLugar
             txtNuevoLugar.Text = lugar.nom_lugar
             txtdescrLugar.Text = lugar.descr_lugar
             btnNuevoLugar.Text = "Editar Lugar"
+            lblRegistroLugar.Text = "Edición de lugar"
         Else
             btnNuevoLugar.Text = "Registrar Lugar"
         End If

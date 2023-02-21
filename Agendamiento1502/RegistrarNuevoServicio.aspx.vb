@@ -10,6 +10,7 @@ Partial Class RegistrarNuevoServicio
     Dim msg As New clMensajes()
 
     Protected Sub btnNuevoServicio_Click(sender As Object, e As EventArgs) Handles btnNuevoServicio.Click
+
         Dim servicio = txtNuevoServicio.Text
         Dim emails As New List(Of String)
         For Each lst As ListItem In cbxlResponsables.Items
@@ -27,9 +28,33 @@ Partial Class RegistrarNuevoServicio
 
             Response.Write(msgbox.Mensajes(msg))
         Else
-            Response.Write(msgbox.Mensajes("No se pudo registrar el mensaje"))
+            Response.Write(msgbox.Mensajes("No se pudo registrar el Servicio"))
         End If
     End Sub
+
+    Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim id = Request.QueryString("id")
+        Debug.WriteLine("ID DEL REPSONSE")
+        Debug.WriteLine(id)
+        Try
+            If id <> "0" Then
+                Dim servicio = ctrlServ.obtenerServicio(id)
+                btnNuevoServicio.Text = "Editar Servicio"
+                txtNuevoServicio.Text = servicio.nom_servicio
+                cbxlResponsables.DataSource = servicio.email_responsable
+                txtNuevoServicio.Enabled = False
+                cbxlResponsables.DataBind()
+                For Each i As ListItem In cbxlResponsables.Items
+                    i.Selected = True
+                Next
+            End If
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+
     Protected Sub btnSeleccionar_Click(sender As Object, e As EventArgs) Handles btnSeleccionar.Click
 
         Dim existe = False
