@@ -3,7 +3,34 @@
 
 <asp:Content runat ="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
   
-    
+
+    <h2>Registro de Nuevo Evento/Reserva</h2>
+    <br />
+    <br />
+    <div class="row">
+        <br />
+        <br />
+        <div class="col-4">
+            <div class="form-group">
+                <h3><label for="exampleFormControlInput1">Nombre del Evento</label> </h3>
+                <asp:TextBox ID="txtNombreEvento" runat="server"  CssClass="form-control"></asp:TextBox>
+            </div>
+
+            <div class="form-group">
+                <h3><label for="exampleFormControlInput1">Descripción del evento</label> </h3>
+                <asp:TextBox ID="txtDescripcionEvento" runat="server" height="500px" CssClass="form-control" TextMode="MultiLine"></asp:TextBox>
+            </div>
+        </div>
+        <hr />
+        <div class="col">
+            
+
+        </div>
+    </div>
+
+
+
+
     <div>
         <asp:Label ID="Evento" runat="server" Text="Evento"></asp:Label>
     </div>
@@ -42,7 +69,7 @@
                 <td style="width: 198px" class="modal-sm">&nbsp;</td>
                 <td style="width: 231px" class="modal-sm">&nbsp;</td>
                 <td class="modal-sm" colspan="4">
-                    <asp:TextBox ID="txtNombreEvento" runat="server" Width="244px" CssClass="form-control input-lg"></asp:TextBox>
+                    <asp:TextBox ID="txtxt" runat="server" Width="244px" CssClass="form-control input-lg"></asp:TextBox>
                 </td>
                 <td style="width: 237px">
                     &nbsp;</td>
@@ -56,7 +83,7 @@
                 <td style="width: 198px" class="modal-sm">&nbsp;</td>
                 <td style="width: 231px" class="modal-sm">&nbsp;</td>
                 <td class="modal-sm" colspan="4">
-                    <asp:TextBox ID="txtDescripcionEvento" runat="server" Width="243px"></asp:TextBox>
+                    <asp:TextBox ID="txtxtxt" runat="server" Width="243px"></asp:TextBox>
                 </td>
                 <td style="width: 237px">
                     &nbsp;</td>

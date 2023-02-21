@@ -40,14 +40,8 @@
                     <asp:Label ID="lblListaRecursos" runat="server" Text="Lista de Recursos"></asp:Label></h4>
             </div>
             <div class="col">
-                <asp:Button ID="linkbtnNuevoRecurso" runat="server" Text="Registrar Recurso" Width="160px" type="submit" CssClass="btn btn-outline-success " />
+                <asp:Button ID="linkbtnNuevoRecurso" runat="server" Text="Registrar Recurso" Width="160px" type="submit" CssClass="btn btn-outline-success " data-bs-toggle="modal" data-bs-target="#staticBackdrop" />
             </div>
-
-
-
-
-
-
 
         </div>
         <br />
@@ -60,17 +54,18 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        
+
                         <th scope="col">Opciones</th>
                         <th scope="col">Nombre Recurso</th>
                         <th scope="col">Descripción</th>
-                        
+
                     </tr>
                 </thead>
                 <tbody>
                     <%For each r As Recurso In Session("recursos") %>
                     <tr>
-                        <td><asp:LinkButton ID="linkBtnEditar" runat="server" OnClick ="linkbtnNuevoRecurso_Click" CommandArgument='<%:r.id_recurso%>' >Editar</asp:LinkButton></td>
+                        <td>
+                            <asp:LinkButton ID="linkBtnEditar" runat="server" OnClick="linkbtnNuevoRecurso_Click" CommandArgument='<%:r.id_recurso%>'>Editar</asp:LinkButton></td>
                         <td><%:r.nom_Recurso  %></td>
                         <td><%:r.desc_recurso   %></td>
                     </tr>
@@ -92,29 +87,31 @@
             </div>
             <div class="col-1">
                 <asp:Button ID="linkbtnRegistrarNuevoLugar" runat="server" Text="Nuevo Lugar" Width="160px" type="submit" CssClass="btn btn-outline-success " />
+                
             </div>
-            
+
             <hr />
         </div>
         <div class="row ms-5">
             <asp:GridView ID="gvLugares" runat="server" Width="955px">
-                        </asp:GridView>
+            </asp:GridView>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        
+
                         <th scope="col">Opciones</th>
                         <th scope="col">Nombre Lugar</th>
                         <th scope="col">Descripción</th>
-                        
+
                     </tr>
                 </thead>
                 <tbody>
                     <%For each l As Lugar In Session("lugares") %>
                     <tr>
                         <%Dim idLugar = l.id_lugar  %>
-                        <td><asp:LinkButton ID="linkBtnEditarLugar" runat="server" OnClick ="linkbtnNuevoRecurso_Click" CommandArgument='<%:l.id_lugar%>' >Editar</asp:LinkButton></td>
-                       
+                        <td>
+                            <asp:LinkButton ID="linkBtnEditarLugar" runat="server" OnClick="linkbtnNuevoRecurso_Click" CommandArgument='<%:l.id_lugar%>'>Editar</asp:LinkButton></td>
+
                         <td><%:l.nom_lugar   %></td>
                         <td><%:l.descr_lugar    %></td>
                     </tr>
@@ -124,16 +121,33 @@
         </div>
 
 
-      
+
 
     </div>
 
 
     <hr />
 
-    
 
-    
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 </asp:Content>
 
