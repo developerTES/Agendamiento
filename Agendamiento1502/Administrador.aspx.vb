@@ -15,7 +15,7 @@ Partial Class Administrador
     Protected Sub linkbtnRegistrarNuevoServicio_Click(sender As Object, e As EventArgs) Handles linkbtnRegistrarNuevoServicio.Click
         Dim msg As New clMensajes
         'Response.Write(msg.Mensajes("Hola Mundo"))
-        Response.Write(msg.Fx_AbrirVentana("RegistrarNuevoServicio.aspx", "", 300, 300, 500, 300))
+        Response.Write(msg.Fx_AbrirVentana("RegistrarNuevoServicio.aspx", "", 800, 400, 300, 300))
     End Sub
     Protected Sub ddlServicios_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlServicios.SelectedIndexChanged
         lblNomServicio.Text = ddlServicios.SelectedItem.ToString
@@ -28,7 +28,7 @@ Partial Class Administrador
     Protected Sub linkbtnNuevoRecurso_Click(sender As Object, e As EventArgs) Handles linkbtnNuevoRecurso.Click
         Dim msg As New clMensajes
         'Response.Write(msg.Mensajes("Hola Mundo"))
-        Response.Write(msg.Fx_AbrirVentana("RegistrarNuevoRecurso.aspx", ddlServicios.SelectedValue, 300, 300, 500, 300))
+        Response.Write(msg.Fx_AbrirVentana("RegistrarNuevoRecurso.aspx", ddlServicios.SelectedValue, 400, 500, 500, 300))
     End Sub
     Protected Sub gvLugares_SelectedIndexChanged(sender As Object, e As EventArgs) Handles gvLugares.SelectedIndexChanged
 

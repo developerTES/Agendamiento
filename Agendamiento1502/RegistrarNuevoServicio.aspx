@@ -37,47 +37,53 @@
             height: 58px;
         }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
-    <form id="form1" runat="server">
-        <div>
-            <asp:Label ID="lblNuevoServicio0" runat="server" Text="Nombre del Nuevo servicio" Font-Bold="True"></asp:Label>
-        </div>
-        <div>
+    
 
-            <table class="auto-style1">
-                <tr>
-                    <td class="auto-style2">
-            <asp:Label ID="lblNuevoServicio" runat="server" Text="Nombre del Nuevo servicio"></asp:Label>
-                    </td>
-                    <td class="auto-style13" colspan="2">
-                        <asp:TextBox ID="txtNuevoServicio" runat="server" Width="213px"></asp:TextBox>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="auto-style15">E-Mail responsables del servicio </td>
-                    <td class="auto-style16">
-                        <asp:TextBox ID="txtEmailServicio" runat="server" Width="209px" TextMode="Email"></asp:TextBox>
-                    </td>
-                    <td class="auto-style12">
-                        <asp:Button ID="btnSeleccionar" runat="server" Text="Seleccionar" Width="111px" />
-                    </td>
-                </tr>
-                <tr>
-                    <td class="auto-style3">&nbsp;</td>
-                    <td class="auto-style11" colspan="2">
-                        <asp:CheckBoxList ID="cbxlResponsables" runat="server" AutoPostBack="True" Width="646px">
-                        </asp:CheckBoxList>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <asp:Button ID="btnNuevoServicio" runat="server" Text="Registrar Servicio" Width="160px" />
-                    </td>
-                </tr>
-            </table>
+    <form runat ="server">
+        
+            <div class="form-group col-md-6">
+                <br />
+                <h3>
+                    <asp:Label ID="Label1" runat="server" Text="Registro nuevo servicio" Font-Bold="True"></asp:Label>
+                </h3>
+                <br />
+                <hr />
+                <label for="lblServicio">Nombre del servicio</label>
+                <asp:TextBox ID="txtNuevoServicio" runat="server" Width="213px" CssClass="form-control" placeholder="Servicio" required AutoPostBack="True"></asp:TextBox>
+                <div class="invalid-feedback">Ingrese el nombre del servicio</div>
+            </div>
+        <br />
+        
+            <div class="form-group row">
+                
+            <div class="form-group col-md-3">
+                
+                <asp:TextBox ID="txtEmailServicio" runat="server" Width="209px" TextMode="Email" CssClass="form-control" placeholder="E-Mail responsables del servicio"></asp:TextBox>
 
-        </div>
-    </form>
+            </div>
+            <div class="form-group col-md-3">
+                <asp:Button ID="btnSeleccionar" runat="server" Text="Agregar" Width="111px" CssClass="btn btn-outline-info" />
+            </div>
+            <div class="form-group col-md-6">
+                <asp:CheckBoxList ID="cbxlResponsables" runat="server" AutoPostBack="True" Width="646px"> </asp:CheckBoxList>
+            </div>
+                </div>
+      <br />
+        <hr />
+    <div class="form-row">
+        <asp:Button ID="btnNuevoServicio" runat="server" Text="Registrar Servicio" Width="160px"  CssClass="btn btn-outline-success" type="submit"/>
+
+    </div>
+
+  </form>
+
+
 </body>
+
+
+
+
 </html>

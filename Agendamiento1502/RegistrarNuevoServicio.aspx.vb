@@ -1,9 +1,13 @@
 ﻿
+Imports System.Diagnostics
+
 Partial Class RegistrarNuevoServicio
     Inherits System.Web.UI.Page
 
 
     'Dim lstEmails As New Dictionary(Of String, String)
+    Dim ctrlServ As New ControladorServicio_Recurso_Lugar()
+    Dim msg As New clMensajes()
 
     Protected Sub btnNuevoServicio_Click(sender As Object, e As EventArgs) Handles btnNuevoServicio.Click
         Dim servicio = txtNuevoServicio.Text
@@ -23,7 +27,7 @@ Partial Class RegistrarNuevoServicio
 
             Response.Write(msgbox.Mensajes(msg))
         Else
-            Response.Write(MsgBox.Mensajes("No se pudo registrar el mensaje"))
+            Response.Write(msgbox.Mensajes("No se pudo registrar el mensaje"))
         End If
     End Sub
     Protected Sub btnSeleccionar_Click(sender As Object, e As EventArgs) Handles btnSeleccionar.Click
@@ -54,5 +58,15 @@ Partial Class RegistrarNuevoServicio
         'lstEmails = New List(Of String)
 
 
+    End Sub
+    Protected Sub txtNuevoServicio_TextChanged(sender As Object, e As EventArgs) Handles txtNuevoServicio.TextChanged
+        Dim serv = ctrlServ.obtenerServicio(txtNuevoServicio.Text)
+        If serv IsNot Nothing Then
+            Debug.WriteLine("El servicio ya existe")
+            Response.Write(msg.Mensajes("El servicio ya existe"))
+            txtNuevoServicio.Text = ""
+        Else
+            'Debug.WriteLine("El servicio no existe")
+        End If
     End Sub
 End Class
