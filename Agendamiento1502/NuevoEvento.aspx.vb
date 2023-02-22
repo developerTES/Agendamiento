@@ -349,6 +349,9 @@ Partial Class Nuevo_Evento
 
     Protected Sub cbRepitencia_CheckedChanged(sender As Object, e As EventArgs) Handles cbRepitencia.CheckedChanged
         If cbRepitencia.Checked = True Then
+            panelNoRepitencia.Visible = False
+            panelRepitencia.Visible = True
+            'panelNoRepitencia.Controls.a
             cargarCamposRepitencia(True)
             cargarCamposNoRepitencia(False)
             If ddlTipoRepitencia.SelectedIndex <> 1 Then
@@ -360,6 +363,8 @@ Partial Class Nuevo_Evento
         Else
             cargarCamposRepitencia(False)
             cargarCamposNoRepitencia(True)
+            panelNoRepitencia.Visible = True
+            panelRepitencia.Visible = False
         End If
     End Sub
     Protected Sub ddlTipoRepitencia_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlTipoRepitencia.SelectedIndexChanged
@@ -480,6 +485,9 @@ Partial Class Nuevo_Evento
         End Try
     End Sub
 
+    Protected Sub txtDescripcionEvento_TextChanged(sender As Object, e As EventArgs) Handles txtDescripcionEvento.TextChanged
+
+    End Sub
 End Class
 
 
