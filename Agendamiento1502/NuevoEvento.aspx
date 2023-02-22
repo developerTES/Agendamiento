@@ -155,19 +155,23 @@
                 <asp:DropDownList ID="ddlLugar" runat="server" DataSourceID="SqlDataSource1" DataTextField="NOM_LUGAR" DataValueField="ID_LUGAR" Style="margin-bottom: 6" CssClass="form-control">
                 </asp:DropDownList>
                 <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:AgendamientoConnectionString %>" SelectCommand="SELECT [NOM_LUGAR], [ID_LUGAR] FROM [LUGAR]"></asp:SqlDataSource>
+                
             </div>
+            <br />
+                <hr />
             <div class="row">
 
-
+                <br />
+                
 
                 <h3>
                     <asp:Label ID="Label4" runat="server" Font-Bold="True" Font-Size="Large" Text="Invitados"></asp:Label></h3>
                 <br />
-                <div class="col-md-6 col-xs-12 col-sm-12">
+                <div class="col-md-6 col-xs-12 col-sm-12 form-inline">
 
 
 
-                    <div class="col-md-8 col-xs-8 col-sm-8 form-inline">
+                    <br />
                         <div class="row">
                             <h5>
                                 <asp:Label ID="lblInfo1" runat="server" Text="Ingrese correo de invitados"></asp:Label></h5>
@@ -177,7 +181,7 @@
                         <asp:Button ID="btnAgregarInvitado" runat="server" CssClass="btn btn-secondary" Text="Agregar Invitado" />
                         <asp:Button ID="btnRetirarSeleccionados" runat="server" Text="Retirar Seleccionados" CssClass="btn btn-secondary" />
 
-                    </div>
+                    
 
 
 
@@ -188,7 +192,7 @@
 
 
             </div>
-
+            <br />
         </div>
 
 
