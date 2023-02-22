@@ -167,7 +167,7 @@
                 <h3>
                     <asp:Label ID="Label4" runat="server" Font-Bold="True" Font-Size="Large" Text="Invitados"></asp:Label></h3>
                 <br />
-                <div class="col-md-6 col-xs-12 col-sm-12 form-inline">
+                <div class="col-md-8 col-xs-12 col-sm-12 form-inline">
 
 
 
@@ -177,7 +177,7 @@
                                 <asp:Label ID="lblInfo1" runat="server" Text="Ingrese correo de invitados"></asp:Label></h5>
                         </div>
 
-                        <asp:TextBox ID="txtInvitado" runat="server" TextMode="Email"></asp:TextBox>
+                        <asp:TextBox ID="txtInvitado" runat="server" TextMode="Email" CssClass="form-control"></asp:TextBox>
                         <asp:Button ID="btnAgregarInvitado" runat="server" CssClass="btn btn-secondary" Text="Agregar Invitado" />
                         <asp:Button ID="btnRetirarSeleccionados" runat="server" Text="Retirar Seleccionados" CssClass="btn btn-secondary" />
 
@@ -186,8 +186,8 @@
 
 
                 </div>
-                <div class="col-md-6 col-xs-12 col-sm-12">
-                    <asp:CheckBoxList ID="cbxlInvitados" runat="server"></asp:CheckBoxList>
+                <div class="col-md-4 col-xs-12 col-sm-12">
+                    <asp:CheckBoxList ID="cbxlInvitados" runat="server" ></asp:CheckBoxList>
                 </div>
 
 
