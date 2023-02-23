@@ -327,24 +327,27 @@ Public Class ControladorServicio_Recurso_Lugar
     Public Function VerificarDisponibilidadLugar(strLugarID As String, datetimeinicio As Date, datetimeFin As Date) As String
         Try
             conn.Open()
-            Dim strSQL = "SELECT * FROM LUGAR WHERE ID_LUGAR  = @ID"
-            Dim cmd = New SqlCommand(strSQL, conn)
+            Dim cmd As New SqlCommand With {.Connection = conn}
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = "verificarDisponibilidadLugar"
+            cmd.Parameters.AddWithValue("@EID_LUGAR", strLugarID)
+            cmd.Parameters.AddWithValue("@EDATE_INICIO", datetimeinicio)
+            cmd.Parameters.AddWithValue("@EDATE_FIN", datetimeFin)
+            'cmd.Parameters.AddWithValue("@EEMAIL_SERVICIO", email)
 
-            cmd.Parameters.AddWithValue("@ID", _id)
 
             Dim datareader = cmd.ExecuteReader()
             Dim bool = datareader.Read()
             If bool Then
-                Dim lugar As New Lugar(datareader.GetValue(0), datareader.GetValue(1), datareader.GetValue(2))
-                conn.close()
-                Return lugar
+
+                Return "Hay un evento agendado actualmente"
             Else
-                Return Nothing
+                Return "No hay eventos agendados en el lugar"
             End If
 
         Catch ex As Exception
             Debug.WriteLine("ERROR EN OBTENER LUGAR " & ex.Message)
-            Return Nothing
+            Return "ERROR verificar disponibilidad " & ex.Message
         End Try
     End Function
 End Class

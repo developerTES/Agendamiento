@@ -89,6 +89,11 @@
 
                         </div>
 
+                        <div class="row">
+                            <h5><asp:Label ID="lblDuracion" runat="server" Text=""></asp:Label></h5>
+                        </div>
+                        <br />
+                        <br />
                         <hr />
                     </div>
 
@@ -152,9 +157,17 @@
                 <h5>
                     <asp:Label ID="Label2" runat="server" Text="Seleccione el Lugar"></asp:Label></h5>
                 <br />
-                <asp:DropDownList ID="ddlLugar" runat="server" DataSourceID="SqlDataSource1" DataTextField="NOM_LUGAR" DataValueField="ID_LUGAR" Style="margin-bottom: 6" CssClass="form-control" AutoPostBack="True">
+                <div class="align-content-center">
+                    <div class="col-10 ">
+                    <asp:DropDownList ID="ddlLugar" runat="server"  DataTextField="NOM_LUGAR" DataValueField="ID_LUGAR" Style="margin-bottom: 6" CssClass="form-control" AutoPostBack="True" required="true">
                 </asp:DropDownList>
-                <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:AgendamientoConnectionString %>" SelectCommand="SELECT [NOM_LUGAR], [ID_LUGAR] FROM [LUGAR]"></asp:SqlDataSource>
+                        <!-- DataSourceID="SqlDataSource1"-->
+                  <!--     
+                <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:AgendamientoConnectionString %>" SelectCommand="SELECT [NOM_LUGAR], [ID_LUGAR] FROM [LUGAR]"></asp:SqlDataSource>--> 
+                </div>
+                </div>
+                
+                
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
   Launch demo modal
 </button>

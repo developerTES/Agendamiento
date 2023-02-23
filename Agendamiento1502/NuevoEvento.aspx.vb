@@ -181,6 +181,9 @@ Partial Class Nuevo_Evento
 
         If Not Me.IsPostBack Then
             Me.BindRepeater()
+            Dim lstLugares = ctrlServRecursoLugar.obtenerLugares()
+            ddlLugar.DataSource = lstLugares
+            ddlLugar.DataBind()
         End If
 
         'cargarCamposRepitencia(False)
@@ -457,44 +460,90 @@ Partial Class Nuevo_Evento
 
 
     Protected Sub txtDatetimeInicio_TextChanged(sender As Object, e As EventArgs) Handles txtDatetimeInicio.TextChanged
-        Try
-            Dim d_inicio = Convert.ToDateTime(txtDatetimeInicio.Text)
-            Dim d_final = Convert.ToDateTime(txtDatetimeFin.Text)
+        estimarDuracion()
+        comprobarFechaCorrecta()
 
-            If d_inicio.CompareTo(DateTime.Now().AddDays(1)) <> 1 Then
-                Dim msg = New clMensajes
-
-                'Debug.WriteLine("Datetime es " & DateTime.Now().AddDays(1).ToString)
-                Response.Write(msg.Mensajes("La fecha debe ser superior a 24 horas!"))
-                txtDatetimeInicio.Text = DateTime.Now().AddDays(1)
-            End If
-        Catch ex As Exception
-            Debug.WriteLine(ex.Message)
-        End Try
-
-        Try
-            Dim d_inicio = Convert.ToDateTime(txtDatetimeInicio.Text)
-            Dim d_final = Convert.ToDateTime(txtDatetimeFin.Text)
-            If d_inicio.CompareTo(d_final) = 1 Then
-                Response.Write(msg.Mensajes("La fecha inicial debe ser superior a la fecha final!"))
-            End If
-        Catch ex As Exception
-            Debug.WriteLine(ex.Message)
-        End Try
 
     End Sub
 
     Protected Sub txtDatetimeFin_TextChanged(sender As Object, e As EventArgs) Handles txtDatetimeFin.TextChanged
+
+        estimarDuracion()
+        comprobarFechaCorrecta()
+    End Sub
+
+    Private Sub estimarDuracion()
         Try
             Dim d_inicio = Convert.ToDateTime(txtDatetimeInicio.Text)
             Dim d_final = Convert.ToDateTime(txtDatetimeFin.Text)
-            If d_inicio.CompareTo(d_final) = 1 Then
-                Response.Write(msg.Mensajes("La fecha inicial debe ser superior a la fecha final!"))
+            Dim duracion = d_final - d_inicio
+            lblDuracion.Text = "Duración estimada: "
+            If duracion.Days > 0 Then
+                lblDuracion.Text += duracion.Days & " Dias, "
+            End If
+            If duracion.Hours > 0 Then
+                lblDuracion.Text += duracion.Hours & " Horas, "
+            End If
+            If duracion.Minutes > 0 Then
+                lblDuracion.Text += duracion.Minutes & " Minutos"
             End If
         Catch ex As Exception
 
         End Try
     End Sub
+
+    Private Sub comprobarFechaCorrecta()
+        Try
+            Dim d_inicio = Convert.ToDateTime(txtDatetimeInicio.Text)
+            If d_inicio.CompareTo(DateTime.Now().AddDays(1)) <> 1 Or d_inicio.CompareTo(DateTime.Now()) <= 0 Then
+                Response.Write(msg.Mensajes("La fecha inicial debe ser superior a 24 horas de la fecha actual!"))
+                txtDatetimeInicio.Text = DateTime.Now().AddDays(1).ToString
+                lblDuracion.Visible = False
+            Else
+                Try
+                    Dim d_fin = Convert.ToDateTime(txtDatetimeFin.Text)
+                    If d_fin.CompareTo(DateTime.Now().AddDays(1)) <> 1 Then
+                        Response.Write(msg.Mensajes("La fecha final debe ser superior a 24 horas de la fecha actual!"))
+                        txtDatetimeFin.Text = DateTime.Now().AddDays(1).ToString
+                        lblDuracion.Visible = False
+
+                    Else
+                        Try
+                            Dim d_in = Convert.ToDateTime(txtDatetimeInicio.Text)
+                            Dim d_final = Convert.ToDateTime(txtDatetimeFin.Text)
+                            Dim duracion = d_final - d_in
+
+                            If duracion.TotalHours < 0 Then
+                                Response.Write(msg.Mensajes("La fecha final debe ser mayor a la inicial!"))
+                                txtDatetimeFin.Text = Convert.ToDateTime(txtDatetimeInicio.Text).AddHours(1)
+                                lblDuracion.Visible = False
+                            Else
+                                lblDuracion.Visible = True
+                            End If
+                        Catch ex As Exception
+
+                        End Try
+                        'lblDuracion.Visible = True
+                    End If
+                Catch ex As Exception
+
+                End Try
+                'lblDuracion.Visible = True
+            End If
+
+
+
+        Catch ex As Exception
+
+        End Try
+
+
+
+
+
+    End Sub
+
+
 
     Protected Sub txtDescripcionEvento_TextChanged(sender As Object, e As EventArgs) Handles txtDescripcionEvento.TextChanged
 
@@ -509,9 +558,9 @@ Partial Class Nuevo_Evento
                 datetimeFin = DateTime.Parse(txtDatetimeFin.Text)
 
                 Dim strRta = ctrlServRecursoLugar.VerificarDisponibilidadLugar(strLugarID, datetimeinicio, datetimeFin)
-
+                Response.Write(msg.Mensajes(strRta))
             Catch ex As Exception
-                Response.Write(msg.Mensajes(("Error")))
+                Response.Write(msg.Mensajes(("Error convirtiendo datos")))
             End Try
         End If
     End Sub
