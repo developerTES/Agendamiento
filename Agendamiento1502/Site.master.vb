@@ -52,7 +52,7 @@ Public Partial Class SiteMaster
     End Sub
 
     Protected Sub Page_Load(sender As Object, e As EventArgs)
-
+        Page.MaintainScrollPositionOnPostBack = True
     End Sub
 
 

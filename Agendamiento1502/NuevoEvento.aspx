@@ -1,4 +1,4 @@
-﻿<%@ Page Language="VB" AutoEventWireup="false" CodeFile="NuevoEvento.aspx.vb" Inherits="Nuevo_Evento" MasterPageFile="~/Site.master" %>
+﻿<%@ Page Language="VB" AutoEventWireup="false" CodeFile="NuevoEvento.aspx.vb" Inherits="Nuevo_Evento" MasterPageFile="~/Site.master"  %>
 
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
@@ -207,7 +207,7 @@
 
     <br />
     <br />
-    <hr />
+
 
 
     <div>

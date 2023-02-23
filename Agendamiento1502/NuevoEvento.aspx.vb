@@ -255,7 +255,10 @@ Partial Class Nuevo_Evento
 
                 If servicioActual <> "" Then
                     s.recursos = r
-                    lstServRecursos.Add(s)
+                    If s.recursos.Count <> 0 Then
+                        lstServRecursos.Add(s)
+
+                    End If
                     r = New List(Of Recurso)
 
                 End If
