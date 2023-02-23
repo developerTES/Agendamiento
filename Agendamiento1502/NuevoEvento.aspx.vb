@@ -17,7 +17,8 @@ Partial Class Nuevo_Evento
 
 
         Dim strNombre = txtNombreEvento.Text
-        Dim strDescripcion = txtDescripcionEvento.Text
+        Dim strDescripcion = txtDescripcionEvento.Text.ToString
+        Debug.WriteLine("DESCRIPCION ES " + strDescripcion.ToString)
         Dim strLugarID = ddlLugar.SelectedValue
         Dim respuesta = ""
 
@@ -286,8 +287,15 @@ Partial Class Nuevo_Evento
 
 
         Next
-        s.recursos = r
-        lstServRecursos.Add(s)
+        Try
+            If s.recursos.Count <> 0 Then
+                lstServRecursos.Add(s)
+
+            End If
+        Catch ex As Exception
+
+        End Try
+
         For Each servicio In lstServRecursos
             Debug.WriteLine("SERVICIO ------- " & servicio.nom_servicio)
             For Each recurso In servicio.recursos
@@ -491,6 +499,23 @@ Partial Class Nuevo_Evento
     Protected Sub txtDescripcionEvento_TextChanged(sender As Object, e As EventArgs) Handles txtDescripcionEvento.TextChanged
 
     End Sub
+    Protected Sub ddlLugar_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlLugar.SelectedIndexChanged
+        If txtDatetimeInicio.Text IsNot Nothing And txtDatetimeFin.Text IsNot Nothing Then
+            Dim strLugarID = ddlLugar.SelectedValue
+            Dim datetimeinicio As New DateTime()
+            Dim datetimeFin As New DateTime()
+            Try
+                datetimeinicio = DateTime.Parse(txtDatetimeInicio.Text)
+                datetimeFin = DateTime.Parse(txtDatetimeFin.Text)
+
+                Dim strRta = ctrlServRecursoLugar.VerificarDisponibilidadLugar(strLugarID, datetimeinicio, datetimeFin)
+
+            Catch ex As Exception
+                Response.Write(msg.Mensajes(("Error")))
+            End Try
+        End If
+    End Sub
+
 End Class
 
 

@@ -168,11 +168,11 @@ Public Class ControladorEvento
                 ev = New Evento(rs.GetValue(0), rs.GetValue(2), rs.GetValue(3), rs.GetValue(1), rs.GetValue(4), rs.GetValue(5))
             End While
             conn.close()
-            Debug.WriteLine("CONEXION CERRADA cantidad de citas ocurrences " + lstOcurrences.Count.ToString)
+            'Debug.WriteLine("CONEXION CERRADA cantidad de citas ocurrences " + lstOcurrences.Count.ToString)
             ev.evGoogle = ctrlGoogleCalendar.getEvento(google_CalUID)
             ev.citas = lstCitas
         Catch ex As Exception
-            Debug.WriteLine("Error obteniendo evento " + ex.Message)
+            'Debug.WriteLine("Error obteniendo evento " + ex.Message)
             Return Nothing
         End Try
 

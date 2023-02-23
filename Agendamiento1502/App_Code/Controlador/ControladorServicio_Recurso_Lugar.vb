@@ -324,4 +324,27 @@ Public Class ControladorServicio_Recurso_Lugar
         End Try
     End Function
 
+    Public Function VerificarDisponibilidadLugar(strLugarID As String, datetimeinicio As Date, datetimeFin As Date) As String
+        Try
+            conn.Open()
+            Dim strSQL = "SELECT * FROM LUGAR WHERE ID_LUGAR  = @ID"
+            Dim cmd = New SqlCommand(strSQL, conn)
+
+            cmd.Parameters.AddWithValue("@ID", _id)
+
+            Dim datareader = cmd.ExecuteReader()
+            Dim bool = datareader.Read()
+            If bool Then
+                Dim lugar As New Lugar(datareader.GetValue(0), datareader.GetValue(1), datareader.GetValue(2))
+                conn.close()
+                Return lugar
+            Else
+                Return Nothing
+            End If
+
+        Catch ex As Exception
+            Debug.WriteLine("ERROR EN OBTENER LUGAR " & ex.Message)
+            Return Nothing
+        End Try
+    End Function
 End Class

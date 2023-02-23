@@ -152,10 +152,15 @@
                 <h5>
                     <asp:Label ID="Label2" runat="server" Text="Seleccione el Lugar"></asp:Label></h5>
                 <br />
-                <asp:DropDownList ID="ddlLugar" runat="server" DataSourceID="SqlDataSource1" DataTextField="NOM_LUGAR" DataValueField="ID_LUGAR" Style="margin-bottom: 6" CssClass="form-control">
+                <asp:DropDownList ID="ddlLugar" runat="server" DataSourceID="SqlDataSource1" DataTextField="NOM_LUGAR" DataValueField="ID_LUGAR" Style="margin-bottom: 6" CssClass="form-control" AutoPostBack="True">
                 </asp:DropDownList>
                 <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:AgendamientoConnectionString %>" SelectCommand="SELECT [NOM_LUGAR], [ID_LUGAR] FROM [LUGAR]"></asp:SqlDataSource>
-                
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+
+
+
             </div>
             <br />
                 <hr />
@@ -293,13 +298,13 @@
                 <td style="width: 637px">
 
                     <asp:Button ID="btnRegistrarEvento" runat="server" Font-Bold="True" Text="Registrar Evento" Width="144px" Height="26px" />
-
                 </td>
                 <td style="width: 990px">&nbsp;</td>
             </tr>
         </table>
 
     </div>
+
 
 
 

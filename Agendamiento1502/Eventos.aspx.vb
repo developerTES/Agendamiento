@@ -1,5 +1,6 @@
 ﻿
 Imports System.Diagnostics
+Imports System.Net
 
 Partial Class Eventos
     Inherits System.Web.UI.Page

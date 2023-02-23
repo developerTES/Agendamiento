@@ -266,12 +266,12 @@ Public Class GoogleCalendarControlador
         request.PageToken = Nothing
         'Dim events = request.Execute()
         Dim events = request.Execute()
-        Debug.WriteLine("OBTENER EVENTOS DEL EVENTO RECURRENTE CREADO : " & id_GoogleCalUID)
+        'Debug.WriteLine("OBTENER EVENTOS DEL EVENTO RECURRENTE CREADO : " & id_GoogleCalUID)
 
         For Each ev In events.Items
 
-            Debug.WriteLine(ev.Id)
-            Debug.WriteLine(ev.Start.DateTime)
+            'Debug.WriteLine(ev.Id)
+            'Debug.WriteLine(ev.Start.DateTime)
         Next
         Return events.Items
     End Function

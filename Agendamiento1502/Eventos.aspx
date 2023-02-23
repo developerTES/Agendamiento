@@ -35,7 +35,7 @@
             <tr>
                 <td><a href="#" class="link-info">Ver</a></td>
                 <td><%:ev.nom_Evento %></td>
-                <td> <%:   ev.evGoogle.Description  %></td>
+                <td> <%:   ev.evGoogle.Description.Split("<br><br>")(0)   %></td>
                 
                 <td><%:ev.evGoogle.Start.DateTime  %>  - <%:ev.evGoogle.End.DateTime  %> </td>
                 <td><%: ctrlServLug.obtenerLugar(ev.id_lugar).nom_lugar   %></td>
@@ -62,7 +62,7 @@
             <%For each ev As Evento In Session("lst_asis")%>
             <tr>
                 <td><%:ev.nom_Evento %></td>
-                <td><%:   ev.evGoogle.Description  %>  </td>
+                <td><%: ev.evGoogle.Description.Split("<br><br>")(0)  %>  </td>
                 <td><%:ev.evGoogle.Start.DateTime  %>  - <%:ev.evGoogle.End.DateTime  %> </td>
                 <td><%:ev.id_lugar  %></td>
             </tr>
@@ -88,7 +88,8 @@
             <%For each ev As Evento In Session("lst_sop")%>
             <tr>
                 <td><%:ev.nom_Evento %></td>
-                <td><%:   ev.evGoogle.Description  %>  </td>
+                <% Dim html As New HtmlString((ev.evGoogle.Description)) %>
+                <td><%:ev.evGoogle.Description.Split("<br><br>")(0)  %>  </td>
                 <td><%:ev.evGoogle.Start.DateTime  %>  - <%:ev.evGoogle.End.DateTime  %> </td>
                 <td><%:ev.id_lugar  %></td>
             </tr>
