@@ -70,7 +70,7 @@
                                     <asp:Label ID="lblFechaInicio" runat="server" Text="Fecha Inicio"></asp:Label>
                                 </h4>
 
-                                <asp:TextBox ID="txtDatetimeInicio" runat="server" Width="180px" TextMode="DateTimeLocal" AutoPostBack="True" CssClass="form-control"></asp:TextBox>
+                                <asp:TextBox ID="txtDatetimeInicio" runat="server" Width="180px" TextMode="DateTimeLocal" AutoPostBack="True" CssClass="form-control" required="True"></asp:TextBox>
                                 <small id="FechaHelp" class="form-text text-muted">La fecha de inicio debe ser superior a 24 horas.</small>
                             </div>
 
@@ -84,7 +84,7 @@
                                 <h4>
                                     <asp:Label ID="lblFechaFin" runat="server" Text="Fecha Fin"></asp:Label></h4>
 
-                                <asp:TextBox ID="txtDatetimeFin" runat="server" Width="188px" TextMode="DateTimeLocal" AutoPostBack="True" CssClass="form-control"></asp:TextBox>
+                                <asp:TextBox ID="txtDatetimeFin" runat="server" Width="188px" TextMode="DateTimeLocal" AutoPostBack="True" CssClass="form-control" required="True"></asp:TextBox>
                             </div>
 
                         </div>
@@ -195,7 +195,8 @@
                                 <asp:Label ID="lblInfo1" runat="server" Text="Ingrese correo de invitados"></asp:Label></h5>
                         </div>
 
-                        <asp:TextBox ID="txtInvitado" runat="server" TextMode="Email" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtInvitado" runat="server" TextMode="Email" CssClass="form-control" ></asp:TextBox>
+                        <asp:DropDownList ID="ddlEmailTES" runat="server" CssClass="form-control"></asp:DropDownList>
                         <asp:Button ID="btnAgregarInvitado" runat="server" CssClass="btn btn-secondary" Text="Agregar Invitado" />
                         <asp:Button ID="btnRetirarSeleccionados" runat="server" Text="Retirar Seleccionados" CssClass="btn btn-secondary" />
 

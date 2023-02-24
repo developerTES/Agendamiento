@@ -165,6 +165,7 @@ Partial Class Nuevo_Evento
 
         If existe Then
         Else
+
             cbxlInvitados.Items.Add(strEmail)
             For Each i As ListItem In cbxlInvitados.Items
                 i.Selected = True
@@ -184,6 +185,13 @@ Partial Class Nuevo_Evento
             Dim lstLugares = ctrlServRecursoLugar.obtenerLugares()
             ddlLugar.DataSource = lstLugares
             ddlLugar.DataBind()
+            ddlLugar.Items.Insert(0, New ListItem("SELECCIONE...", ""))
+            'ddlLugar.Items(0).Selected = True
+            'Dim mycollection As New AutoCompleteStringCollection()
+            Dim ctrlAsistente As New ControladorAsistente()
+            Dim lstPersonalTES = ctrlAsistente.getEmailsPersonalTES()
+            ddlEmailTES.DataSource = lstPersonalTES
+            ddlEmailTES.DataBind()
         End If
 
         'cargarCamposRepitencia(False)
@@ -462,7 +470,7 @@ Partial Class Nuevo_Evento
     Protected Sub txtDatetimeInicio_TextChanged(sender As Object, e As EventArgs) Handles txtDatetimeInicio.TextChanged
         estimarDuracion()
         comprobarFechaCorrecta()
-
+        comprobarDisponibilidad()
 
     End Sub
 
@@ -470,6 +478,7 @@ Partial Class Nuevo_Evento
 
         estimarDuracion()
         comprobarFechaCorrecta()
+        comprobarDisponibilidad()
     End Sub
 
     Private Sub estimarDuracion()
@@ -537,18 +546,21 @@ Partial Class Nuevo_Evento
 
         End Try
 
-
-
-
-
     End Sub
 
+    Protected Sub comprobarInvitados()
+        Dim lstAgendados = ctrlServRecursoLugar.comprobarInvitados(cbxlInvitados.Items)
 
+    End Sub
 
     Protected Sub txtDescripcionEvento_TextChanged(sender As Object, e As EventArgs) Handles txtDescripcionEvento.TextChanged
 
     End Sub
     Protected Sub ddlLugar_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlLugar.SelectedIndexChanged
+        comprobarDisponibilidad()
+    End Sub
+
+    Protected Sub comprobarDisponibilidad()
         If txtDatetimeInicio.Text IsNot Nothing And txtDatetimeFin.Text IsNot Nothing Then
             Dim strLugarID = ddlLugar.SelectedValue
             Dim datetimeinicio As New DateTime()
@@ -557,10 +569,23 @@ Partial Class Nuevo_Evento
                 datetimeinicio = DateTime.Parse(txtDatetimeInicio.Text)
                 datetimeFin = DateTime.Parse(txtDatetimeFin.Text)
 
-                Dim strRta = ctrlServRecursoLugar.VerificarDisponibilidadLugar(strLugarID, datetimeinicio, datetimeFin)
-                Response.Write(msg.Mensajes(strRta))
+
+                If ddlLugar.SelectedIndex = 0 Then
+                Else
+                    Dim strRta = ctrlServRecursoLugar.VerificarDisponibilidadLugar(strLugarID, datetimeinicio, datetimeFin)
+                    If strRta IsNot Nothing Then
+                        'ddlLugar.Items(0).Selected = True
+                        txtDatetimeInicio.Text = Nothing
+                        Response.Write(msg.Mensajes(strRta))
+
+                    End If
+                End If
+
+
+
+
             Catch ex As Exception
-                Response.Write(msg.Mensajes(("Error convirtiendo datos")))
+                'Response.Write(msg.Mensajes(("Error convirtiendo datos")))
             End Try
         End If
     End Sub

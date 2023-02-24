@@ -326,6 +326,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Public Function VerificarDisponibilidadLugar(strLugarID As String, datetimeinicio As Date, datetimeFin As Date) As String
         Try
+            Dim lugar = Me.obtenerLugar(strLugarID)
             conn.Open()
             Dim cmd As New SqlCommand With {.Connection = conn}
             cmd.CommandType = CommandType.StoredProcedure
@@ -339,15 +340,23 @@ Public Class ControladorServicio_Recurso_Lugar
             Dim datareader = cmd.ExecuteReader()
             Dim bool = datareader.Read()
             If bool Then
+                Dim citas As New List(Of Cita)
+                Dim cita As New Cita(datareader.GetValue(0), datareader.GetValue(7), datareader.GetValue(8), datareader.GetValue(9))
+                citas.Add(cita)
+                Dim ev As New Evento(datareader.GetValue(0), datareader.GetValue(2), datareader.GetValue(3), datareader.GetValue(1), datareader.GetValue(4), datareader.GetValue(5), citas)
 
-                Return "Hay un evento agendado actualmente"
+                Return "Hay un evento agendado actualmente en " & lugar.nom_lugar & " !  \n \n Nombre: " & ev.nom_Evento & " \n Organizado por: " & ev.email_organizador & " \n " & " Fecha: " & ev.citas(0).date_inicio & " - " & ev.citas(0).date_fin
             Else
-                Return "No hay eventos agendados en el lugar"
+                Return Nothing
             End If
 
         Catch ex As Exception
             Debug.WriteLine("ERROR EN OBTENER LUGAR " & ex.Message)
             Return "ERROR verificar disponibilidad " & ex.Message
         End Try
+    End Function
+
+    Public Function comprobarInvitados(items As ListItemCollection) As List(Of Asistente)
+
     End Function
 End Class
