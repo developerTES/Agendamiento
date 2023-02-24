@@ -549,8 +549,10 @@ Partial Class Nuevo_Evento
     End Sub
 
     Protected Sub comprobarInvitados()
-        Dim lstAgendados = ctrlServRecursoLugar.comprobarInvitados(cbxlInvitados.Items)
-
+        Dim lstAgendados = ctrlServRecursoLugar.comprobarInvitados(cbxlInvitados.Items, Convert.ToDateTime(txtDatetimeInicio), Convert.ToDateTime(txtDatetimeFin))
+        If lstAgendados.Count < 0 Then
+            Response.Write(msg.Mensajes("Hay invitados que tienen reuniones en la fecha indicada"))
+        End If
     End Sub
 
     Protected Sub txtDescripcionEvento_TextChanged(sender As Object, e As EventArgs) Handles txtDescripcionEvento.TextChanged

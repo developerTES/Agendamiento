@@ -20,7 +20,8 @@
     <% Dim ctrlServLug As New ControladorServicio_Recurso_Lugar()  %>
     <h2> Eventos Organizados por <%:Session("user") %> </h2>
 
-    <table class="table table-bordered">
+    <%If Session("lst_org") IsNot Nothing Then %>
+        <table class="table table-bordered">
         <thead>
             <tr>
                 <th scope="col">Ver en Google Calendar</th>
@@ -43,13 +44,21 @@
             <% Next %>
         </tbody>
     </table>
+    
+    <%else %>
+    <h4>No hay eventos agendados</h4>
+
+    <%End If %>
+
+    
 
     <br />
     <hr />
 
     <h2>Eventos a los que es asistente <%:Session("user") %> </h2>
 
-    <table class="table table-bordered">
+    <%If Session("lst_asis") IsNot Nothing %>
+        <table class="table table-bordered">
         <thead>
             <tr>
                 <th scope="col">Nombre Evento</th>
@@ -59,6 +68,9 @@
             </tr>
         </thead>
         <tbody>
+
+
+
             <%For each ev As Evento In Session("lst_asis")%>
             <tr>
                 <td><%:ev.nom_Evento %></td>
@@ -69,13 +81,19 @@
             <% Next %>
         </tbody>
     </table>
+    <%else %>
+    <h4>No hay eventos agendados</h4>
+    <%End if %>
+
+    
 
     <br />
     <hr />
 
     <h2>Eventos requeridos para soporte por <%:Session("user") %> </h2>
 
-    <table class="table table-bordered">
+    <%If Session("lst_stop") IsNot Nothing Then%>
+        <table class="table table-bordered">
         <thead>
             <tr>
                 <th scope="col">Nombre Evento</th>
@@ -85,7 +103,7 @@
             </tr>
         </thead>
         <tbody>
-            <%For each ev As Evento In Session("lst_sop")%>
+            <%For Each ev As Evento In Session("lst_sop")%>
             <tr>
                 <td><%:ev.nom_Evento %></td>
                 <% Dim html As New HtmlString((ev.evGoogle.Description)) %>
@@ -96,5 +114,10 @@
             <% Next %>
         </tbody>
     </table>
+    <%      Else %>
+    <h4>No hay eventos agendados</h4>
+        <%End If%>
+
+    
     
 </asp:Content>

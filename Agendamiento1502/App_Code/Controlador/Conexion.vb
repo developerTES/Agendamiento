@@ -11,7 +11,7 @@ Public Class Conexion
 
     Sub New()
         Try
-            Me.conn = New SqlConnection("Server=ESCARABAJO\DEVELOPER;Database=Agendamiento;User Id=sa;Password=Developer23")
+            Me.conn = New SqlConnection("Server=ESCARABAJO\DEVELOPER;Database=Reserva;User Id=sa;Password=Developer23")
             Debug.WriteLine("Conectado")
         Catch ex As Exception
             Debug.WriteLine("No hay conexion " & ex.Message)

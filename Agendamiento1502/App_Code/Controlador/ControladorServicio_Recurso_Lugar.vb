@@ -356,7 +356,13 @@ Public Class ControladorServicio_Recurso_Lugar
         End Try
     End Function
 
-    Public Function comprobarInvitados(items As ListItemCollection) As List(Of Asistente)
-
+    Public Function comprobarInvitados(items As ListItemCollection, dateInicio As Date, dateFin As Date) As List(Of Asistente)
+        Try
+            Dim lstAsisAgendados As New List(Of Asistente)
+            conn.Open()
+        Catch ex As Exception
+            Debug.WriteLine("Error comprobando invitados" + ex.Message)
+            Return Nothing
+        End Try
     End Function
 End Class
