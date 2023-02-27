@@ -8,6 +8,9 @@ Public Class ControladorEvento
 
     Dim conn = New Conexion().conn
     Dim ctrlGoogleCalendar As New GoogleCalendarControlador("primary")
+    Sub New()
+
+    End Sub
 
     Public Function RegistrarEventoSimple(evento As Evento, lstAsistentes As List(Of Asistente), cita As Cita) As String
         Try
@@ -109,7 +112,7 @@ Public Class ControladorEvento
                     strSQL = "SELECT * FROM EVENTO as e, CITA as c WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND EMAIL_ORGANIZADOR = @EMAIL and c.date_inicio > GETDATE()  ORDER BY c.DATE_INICIO "
 
                 Case "ASISTENTE"
-                    strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_ASISTENTES as asis WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND e.ID_GOOGLEICALUID = asis.ID_GOOGLEICALUID AND ID_ASISTENTE = @EMAIL and c.date_inicio > GETDATE() ORDER BY c.DATE_INICIO "
+                    strSQL = "SELECT * FROM EVENTO as e, CITA as c, ASISTENTE_EVENTO as asis WHERE  e.ID_GOOGLEICALUID = c.ID_GOOGLEICALUID   AND e.ID_GOOGLEICALUID = asis.ID_GOOGLEICALUID AND ID_ASISTENTE = @EMAIL and c.date_inicio > GETDATE() ORDER BY c.DATE_INICIO "
 
                 Case "SOPORTE"
                     strSQL = "SELECT * FROM EVENTO as e, CITA as c, EVENTO_SERVICIO as e_s, INTEGRANTE AS i WHERE 
@@ -128,14 +131,20 @@ Public Class ControladorEvento
 
             While rs.Read()
                 Dim google_CalUID = rs.GetValue(0)
-
+                'If ctrlGoogleCalendar.verificarEvento(google_CalUID) Then
+                'Debug.WriteLine("EVENTO SIN CANCELAR")
                 lstStr.Add(google_CalUID)
+                'Else
+                'Debug.WriteLine("EVENTO CANCELADO")
+                'End If
+
 
             End While
             conn.close()
 
             For Each id In lstStr
                 Dim ev = Me.getEvento(id)
+
                 lst.Add(ev)
             Next
             Return lst
@@ -153,33 +162,74 @@ Public Class ControladorEvento
         Dim lstOcurrences = ctrlGoogleCalendar.getCitasEvento(google_CalUID)
         Dim ev As New Evento()
 
+        If lstOcurrences Is Nothing Then
+            Return Nothing
+        Else
+            For Each ocurrence In lstOcurrences
+
+                Dim cita As New Cita(google_CalUID, "", ocurrence.Start.DateTime, ocurrence.End.DateTime)
+                lstCitas.Add(cita)
+            Next
+
+            Try
+                conn.Open()
+                Dim cmd = New SqlCommand("SELECT * FROM EVENTO WHERE ID_GOOGLEICALUID=@ID", conn)
+                cmd.Parameters.AddWithValue("@ID", google_CalUID)
+                Dim rs = cmd.ExecuteReader()
+
+                While rs.Read()
+                    ev = New Evento(rs.GetValue(0), rs.GetValue(2), rs.GetValue(3), rs.GetValue(1), rs.GetValue(4), rs.GetValue(5))
+                End While
+                conn.close()
+                'Debug.WriteLine("CONEXION CERRADA cantidad de citas ocurrences " + lstOcurrences.Count.ToString)
+                ev.evGoogle = ctrlGoogleCalendar.getEvento(google_CalUID)
+                ev.citas = lstCitas
+            Catch ex As Exception
+                'Debug.WriteLine("Error obteniendo evento " + ex.Message)
+                Return Nothing
+            End Try
+
+            Return ev
+        End If
 
 
-        For Each ocurrence In lstOcurrences
 
-            Dim cita As New Cita(google_CalUID, "", ocurrence.Start.DateTime, ocurrence.End.DateTime)
-            lstCitas.Add(cita)
-        Next
+    End Function
 
+    Friend Function verificarEventoBD(id_GoogleCalUID As String) As Boolean
         Try
             conn.Open()
-            Dim cmd = New SqlCommand("SELECT * FROM EVENTO WHERE ID_GOOGLEICALUID=@ID", conn)
-            cmd.Parameters.AddWithValue("@ID", google_CalUID)
+            Dim cmd = New SqlCommand("SELECT * FROM EVENTO WHERE ID_GOOGLEICALUID=@ID_EVENTO AND ESTADO = 'confirmed' ", conn)
+            cmd.Parameters.AddWithValue("@ID_EVENTO", id_GoogleCalUID)
             Dim rs = cmd.ExecuteReader()
-
-            While rs.Read()
-                ev = New Evento(rs.GetValue(0), rs.GetValue(2), rs.GetValue(3), rs.GetValue(1), rs.GetValue(4), rs.GetValue(5))
-            End While
+            If rs.Read() Then
+                Return True
+            Else
+                Return False
+            End If
             conn.close()
-            'Debug.WriteLine("CONEXION CERRADA cantidad de citas ocurrences " + lstOcurrences.Count.ToString)
-            ev.evGoogle = ctrlGoogleCalendar.getEvento(google_CalUID)
-            ev.citas = lstCitas
         Catch ex As Exception
-            'Debug.WriteLine("Error obteniendo evento " + ex.Message)
+            Debug.WriteLine("Error verificando evento en BD " + ex.Message)
             Return Nothing
         End Try
+    End Function
 
-        Return ev
+    Friend Function updateEstado(id_GoogleCalUID As String) As String
+        Try
+            conn.Open()
+            Dim cmd = New SqlCommand("UPDATE FROM EVENTO SET ESTADO='cancelled' WHERE ID_GOOGLEICALUID=@ID_EVENTO ", conn)
+            cmd.Parameters.AddWithValue("@ID_EVENTO", id_GoogleCalUID)
+            Dim rs = cmd.ExecuteNonQuery
 
+            If rs > 0 Then
+                Return "Estado del evento actualizado en BD"
+            Else
+                Return "Estado del evento NO actualizado en BD"
+            End If
+            conn.close()
+        Catch ex As Exception
+            Debug.WriteLine("Error actualizando estado del evento en BD " + ex.Message)
+            Return Nothing
+        End Try
     End Function
 End Class

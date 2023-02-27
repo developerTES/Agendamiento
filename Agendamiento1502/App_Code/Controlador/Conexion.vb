@@ -5,7 +5,8 @@ Imports Microsoft.VisualBasic
 Public Class Conexion
 
 
-    Public Property conn As SqlConnection
+    Public Property conn As New SqlConnection
+
 
 
 
@@ -18,6 +19,10 @@ Public Class Conexion
         End Try
 
     End Sub
+
+
+
+
 
 
 

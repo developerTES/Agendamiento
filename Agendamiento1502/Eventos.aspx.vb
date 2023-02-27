@@ -16,12 +16,16 @@ Partial Class Eventos
         Debug.WriteLine(Session("pwd"))
         If Session("user") IsNot Nothing Then
             'Response.Redirect("Eventos.aspx")
+            Debug.WriteLine("Listando eventos")
             Dim listEventos_organizador = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ORGANIZADOR")
             Dim listEventos_asistente = ctrlEventos.ListarEventosEmailTipo(Session("email"), "ASISTENTE")
             Dim listEventos_soporte = ctrlEventos.ListarEventosEmailTipo(Session("email"), "SOPORTE")
             Session("lst_org") = listEventos_organizador
             Session("lst_asis") = listEventos_asistente
             Session("lst_sop") = listEventos_soporte
+            Session("lst_org") = {1, 2, 3}
+            Session("lst_asis") = {1, 2, 3}
+            Session("lst_sop") = {1, 2, 3}
         Else
             Response.Redirect("Default")
         End If

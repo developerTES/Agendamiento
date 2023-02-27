@@ -5,13 +5,14 @@ Imports Microsoft.VisualBasic
 
 Public Class ControladorServicio_Recurso_Lugar
     Dim conn = New Conexion().conn
-
+    'Dim ctrlGoogleCalendar As New GoogleCalendarControlador("primary")
     Sub New()
 
     End Sub
     Public Function registrarNuevoServicio(servicio As String, emails As List(Of String)) As String
         Try
-            conn.Open()
+
+
             Dim idServicio As String = Regex.Replace(servicio, "[^A-Za-z0-9\-/]", "")
             Dim cmd As New SqlCommand With {.Connection = conn}
             cmd.CommandType = CommandType.StoredProcedure
@@ -21,7 +22,7 @@ Public Class ControladorServicio_Recurso_Lugar
             'cmd.Parameters.AddWithValue("@EEMAIL_SERVICIO", email)
             Dim rs = cmd.ExecuteNonQuery()
             Debug.WriteLine("Filas afectadas " & rs)
-            conn.close()
+            conn.Close()
             Dim msg = registrarIntegrantes(idServicio, emails)
 
             Return msg
@@ -34,6 +35,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Private Function registrarIntegrantes(idServicio As String, emails As List(Of String)) As String
         Try
+
             conn.Open()
 
             For Each email In emails
@@ -46,7 +48,7 @@ Public Class ControladorServicio_Recurso_Lugar
             Next
 
 
-            conn.close()
+            conn.Close()
             Return "Integrantes y servicio agregados !!"
         Catch ex As Exception
             Return "Error en registrarIntegrantes: " & ex.Message
@@ -55,7 +57,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Public Function registrarNuevoRecurso(id_servicio As String, recurso As String, descripcion As Object) As String
         Try
-            conn.Open()
+
             Dim cmd As New SqlCommand With {.Connection = conn}
             cmd.CommandType = CommandType.StoredProcedure
             cmd.CommandText = "registrarRecurso"
@@ -69,7 +71,7 @@ Public Class ControladorServicio_Recurso_Lugar
             Else
                 Return Nothing
             End If
-            conn.close()
+            conn.Close()
         Catch ex As Exception
             Debug.WriteLine("Error en nuevo recurso " & ex.Message)
             Return "Error en nuevo Recurso " & ex.Message
@@ -81,7 +83,7 @@ Public Class ControladorServicio_Recurso_Lugar
         Dim recursos As New List(Of Recurso)
         Debug.WriteLine("Obteniendo recursos de " & id_servicio)
         Try
-            conn.Open()
+
             Dim strSQL = "SELECT ID_RECURSO as 'ID Recurso', NOM_RECURSO as 'Nombre Recurso', DESCR_RECURSO as 'Descripción' FROM RECURSO WHERE ID_SERVICIO  = @EID_SERVICIO"
             Dim cmd = New SqlCommand(strSQL, conn)
             cmd.Parameters.AddWithValue("@EID_SERVICIO", id_servicio)
@@ -91,7 +93,7 @@ Public Class ControladorServicio_Recurso_Lugar
                 recursos.Add(recurso)
 
             End While
-            conn.close()
+            conn.Close()
             Return recursos
 
 
@@ -105,7 +107,7 @@ Public Class ControladorServicio_Recurso_Lugar
     Public Function obtenerLugares() As List(Of Lugar)
         Dim lugares As New List(Of Lugar)
         Try
-            conn.Open()
+
             Dim strSQL = "SELECT *  FROM LUGAR"
             Dim cmd = New SqlCommand(strSQL, conn)
 
@@ -115,7 +117,7 @@ Public Class ControladorServicio_Recurso_Lugar
                 lugares.Add(lugar)
 
             End While
-            conn.close()
+            conn.Close()
             Return lugares
 
 
@@ -127,6 +129,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Public Function registrarRecursosRequeridos(ev As Evento, serviciosRequeridos As List(Of Servicio)) As String
         Try
+
             conn.Open()
             For Each s In serviciosRequeridos
                 If s.ObtenerDetalle IsNot Nothing Then
@@ -151,6 +154,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Public Function registrarNuevoLugar(ByVal _lugar As Lugar) As String
         Try
+
             conn.Open()
             Dim strSQL = "INSERT INTO LUGAR VALUES (@ENOM, @EDESCR)"
             Dim cmd = New SqlCommand(strSQL, conn)
@@ -167,12 +171,13 @@ Public Class ControladorServicio_Recurso_Lugar
 
         Catch ex As Exception
             Return "Error en registrar Nuevo Lugar " & ex.Message
-            conn.close()
+            'conn.close()
         End Try
     End Function
 
     Public Function editarLugar(_lugar As Lugar) As Object
         Try
+
             conn.Open()
             Dim strSQL = "UPDATE LUGAR SET NOM_LUGAR = @ENOM, DESCR_LUGAR = @EDESCR WHERE ID_LUGAR = @EID ;"
             Dim cmd = New SqlCommand(strSQL, conn)
@@ -186,7 +191,7 @@ Public Class ControladorServicio_Recurso_Lugar
             Return "Lugar Editado !! " & rs & ". "
 
         Catch ex As Exception
-            conn.close()
+            'conn.close()
             Return "Error en editar Lugar" & ex.Message
 
         End Try
@@ -207,6 +212,7 @@ Public Class ControladorServicio_Recurso_Lugar
     Public Function obtenerEmailsServicio(idServ As String) As List(Of String)
         Dim lstEmails As New List(Of String)
         Try
+
             conn.Open()
             Dim strSQL = "SELECT * FROM INTEGRANTE WHERE ID_SERVICIO = @E_IDSERVICIO "
             Dim cmd = New SqlCommand(strSQL, conn)
@@ -228,6 +234,7 @@ Public Class ControladorServicio_Recurso_Lugar
     Public Function obtenerServicios() As List(Of Servicio)
         Dim lstServicios As New List(Of Servicio)
         Try
+
             conn.Open()
             Dim strSQL = "SELECT ID_SERVICIO, NOM_SERVICIO FROM SERVICIO"
             Dim cmd = New SqlCommand(strSQL, conn)
@@ -252,6 +259,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Public Function obtenerRecurso(idServ As String, idRec As String) As Recurso
         Try
+
             conn.Open()
             Dim strSQL = "SELECT * FROM RECURSO WHERE ID_SERVICIO =@EID_SERVICIO AND ID_RECURSO =@EID_RECURSO"
             Dim cmd = New SqlCommand(strSQL, conn)
@@ -276,6 +284,7 @@ Public Class ControladorServicio_Recurso_Lugar
     Public Function obtenerServicio(ByVal idServ As String) As Servicio
 
         Try
+
             conn.Open()
             Dim strSQL = "SELECT * FROM SERVICIO WHERE ID_SERVICIO =@EID_SERVICIO"
             Dim cmd = New SqlCommand(strSQL, conn)
@@ -302,6 +311,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Public Function obtenerLugar(ByVal _id As String) As Lugar
         Try
+
             conn.Open()
             Dim strSQL = "SELECT * FROM LUGAR WHERE ID_LUGAR  = @ID"
             Dim cmd = New SqlCommand(strSQL, conn)
@@ -326,6 +336,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Public Function VerificarDisponibilidadLugar(strLugarID As String, datetimeinicio As Date, datetimeFin As Date) As String
         Try
+
             Dim lugar = Me.obtenerLugar(strLugarID)
             conn.Open()
             Dim cmd As New SqlCommand With {.Connection = conn}
@@ -340,6 +351,8 @@ Public Class ControladorServicio_Recurso_Lugar
             Dim datareader = cmd.ExecuteReader()
             Dim bool = datareader.Read()
             If bool Then
+                Dim idEvento = datareader.GetValue(0)
+
                 Dim citas As New List(Of Cita)
                 Dim cita As New Cita(datareader.GetValue(0), datareader.GetValue(8), datareader.GetValue(9), datareader.GetValue(10))
                 citas.Add(cita)
@@ -358,6 +371,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Public Function comprobarInvitados(items As ListItemCollection, dateInicio As Date, dateFin As Date) As List(Of Asistente)
         Try
+
             Dim lstAsisAgendados As New List(Of Asistente)
             conn.Open()
         Catch ex As Exception

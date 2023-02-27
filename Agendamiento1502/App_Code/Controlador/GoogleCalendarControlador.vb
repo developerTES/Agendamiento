@@ -16,6 +16,7 @@ Public Class GoogleCalendarControlador
     Public Property calendarID As String
     Public Property service As CalendarService
     Dim ctrlServLugarRec As New ControladorServicio_Recurso_Lugar()
+    'Dim ctrlEvento As New ControladorEvento()
 
     Public Sub New(strCalendarID As String)
         Me.calendarID = strCalendarID
@@ -260,13 +261,14 @@ Public Class GoogleCalendarControlador
     End Function
 
     Function getCitasEvento(id_GoogleCalUID As String) As List(Of Data.Event)
-        'Dim events = service.Events.Instances("primary", id_GoogleCalUID).Execute()
+
+        ' If verificarEvento(id_GoogleCalUID) Then
         Dim request = service.Events.Instances("primary", id_GoogleCalUID)
-        'Dim request = service.Events.List("primary")
-        request.PageToken = Nothing
-        'Dim events = request.Execute()
-        Dim events = request.Execute()
-        'Debug.WriteLine("OBTENER EVENTOS DEL EVENTO RECURRENTE CREADO : " & id_GoogleCalUID)
+
+            request.PageToken = Nothing
+
+            Dim events = request.Execute()
+
 
         For Each ev In events.Items
 
@@ -274,6 +276,10 @@ Public Class GoogleCalendarControlador
             'Debug.WriteLine(ev.Start.DateTime)
         Next
         Return events.Items
+            'Else
+        ' Return Nothing
+        'End If
+
     End Function
 
 
@@ -282,6 +288,7 @@ Public Class GoogleCalendarControlador
         Dim ev = request.Execute()
         Return ev
     End Function
+
 
     'Function addInvitadosServicios()
     '   service.Events.Update()
