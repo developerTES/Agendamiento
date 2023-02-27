@@ -18,6 +18,7 @@
     <br />
     <hr />
     <% Dim ctrlServLug As New ControladorServicio_Recurso_Lugar()  %>
+    <% Dim ctrlCalGoogle As New GoogleCalendarControlador("primary")  %>
     <h2> Eventos Organizados por <%:Session("user") %> </h2>
 
     <%If Session("lst_org") IsNot Nothing Then %>
@@ -34,7 +35,11 @@
         <tbody>
             <%For each ev As Evento In Session("lst_org")%>
             <tr>
-                <td><a href="#" class="link-info">Ver</a></td>
+                <%Dim evGoogle = ctrlCalGoogle.getEvento(ev.id_GoogleCalUID) %>
+                <td>
+                    <a href="<%:evGoogle.HtmlLink  %>" class="link-info">Ver</a>
+                    <a  onclick=""  class="link-info">Eliminar</a>
+                </td>
                 <td><%:ev.nom_Evento %></td>
                 <td> <%:   ev.evGoogle.Description.Split("<br><br>")(0)   %></td>
                 

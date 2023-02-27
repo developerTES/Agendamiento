@@ -318,7 +318,7 @@ Partial Class Nuevo_Evento
         Catch ex As Exception
 
         End Try
-
+        Debug.WriteLine(lstServRecursos.Count & " Cantidad de servicios requeridos y rec")
         For Each servicio In lstServRecursos
             Debug.WriteLine("SERVICIO ------- " & servicio.nom_servicio)
             For Each recurso In servicio.recursos
