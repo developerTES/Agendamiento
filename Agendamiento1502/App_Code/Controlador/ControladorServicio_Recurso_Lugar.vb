@@ -5,13 +5,13 @@ Imports Microsoft.VisualBasic
 
 Public Class ControladorServicio_Recurso_Lugar
     Dim conn = New Conexion().conn
-    'Dim ctrlGoogleCalendar As New GoogleCalendarControlador("primary")
+    Dim ctrlGoogleCalendar As New GoogleCalendarControlador("primary")
     Sub New()
 
     End Sub
     Public Function registrarNuevoServicio(servicio As String, emails As List(Of String)) As String
         Try
-
+            conn.Open()
 
             Dim idServicio As String = Regex.Replace(servicio, "[^A-Za-z0-9\-/]", "")
             Dim cmd As New SqlCommand With {.Connection = conn}
@@ -57,7 +57,7 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Public Function registrarNuevoRecurso(id_servicio As String, recurso As String, descripcion As Object) As String
         Try
-
+            conn.Open()
             Dim cmd As New SqlCommand With {.Connection = conn}
             cmd.CommandType = CommandType.StoredProcedure
             cmd.CommandText = "registrarRecurso"
@@ -83,7 +83,7 @@ Public Class ControladorServicio_Recurso_Lugar
         Dim recursos As New List(Of Recurso)
         Debug.WriteLine("Obteniendo recursos de " & id_servicio)
         Try
-
+            conn.Open()
             Dim strSQL = "SELECT ID_RECURSO as 'ID Recurso', NOM_RECURSO as 'Nombre Recurso', DESCR_RECURSO as 'Descripción' FROM RECURSO WHERE ID_SERVICIO  = @EID_SERVICIO"
             Dim cmd = New SqlCommand(strSQL, conn)
             cmd.Parameters.AddWithValue("@EID_SERVICIO", id_servicio)
@@ -107,7 +107,7 @@ Public Class ControladorServicio_Recurso_Lugar
     Public Function obtenerLugares() As List(Of Lugar)
         Dim lugares As New List(Of Lugar)
         Try
-
+            conn.Open()
             Dim strSQL = "SELECT *  FROM LUGAR"
             Dim cmd = New SqlCommand(strSQL, conn)
 
@@ -336,6 +336,16 @@ Public Class ControladorServicio_Recurso_Lugar
 
     Public Function VerificarDisponibilidadLugar(strLugarID As String, datetimeinicio As Date, datetimeFin As Date) As String
         Try
+            Dim ctrlEv As New ControladorEvento()
+            Dim eventosEnLugar = ctrlEv.obtenerEventosXLugar(strLugarID)
+
+            For Each e In eventosEnLugar
+                If ctrlGoogleCalendar.verificarEvento(e.id_GoogleCalUID) = False Then
+                    If ctrlGoogleCalendar.verificarEventoBD(e.id_GoogleCalUID) Then
+                        ctrlGoogleCalendar.updateEstado(e.id_GoogleCalUID)
+                    End If
+                End If
+            Next
 
             Dim lugar = Me.obtenerLugar(strLugarID)
             conn.Open()
@@ -356,7 +366,7 @@ Public Class ControladorServicio_Recurso_Lugar
                 Dim citas As New List(Of Cita)
                 Dim cita As New Cita(datareader.GetValue(0), datareader.GetValue(8), datareader.GetValue(9), datareader.GetValue(10))
                 citas.Add(cita)
-                Dim ev As New Evento(datareader.GetValue(0), datareader.GetValue(2), datareader.GetValue(3), datareader.GetValue(1), datareader.GetValue(4), datareader.GetValue(5), citas)
+                Dim ev As New Evento(datareader.GetValue(0), datareader.GetValue(2), datareader.GetValue(3), datareader.GetValue(1), datareader.GetValue(4), datareader.GetValue(5), datareader.GetValue(6), citas)
 
                 Return "Hay un evento agendado actualmente en " & lugar.nom_lugar & " !  \n \n Nombre: " & ev.nom_Evento & " \n Organizado por: " & ev.email_organizador & " \n " & " Fecha: " & ev.citas(0).date_inicio & " - " & ev.citas(0).date_fin
             Else

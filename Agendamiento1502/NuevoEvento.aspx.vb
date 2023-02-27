@@ -78,7 +78,7 @@ Partial Class Nuevo_Evento
 
             Dim eventoGoogleCal = New EventoGoogleCalendar(strNombre, strDescripcion, invitados, Reglas_Recurrencia)
             Dim eventoGoogleCreado = ctrlGoogleCalendario.RegistrarEventoRecurrente(eventoGoogleCal, horaInicio, horaFin, serviciosRequeridos)
-            Dim evento As New Evento(eventoGoogleCreado.Id, Session("email"), strNombre, strLugarID, "REUNION", "ESRECURRENTE")
+            Dim evento As New Evento(eventoGoogleCreado.Id, Session("email"), strNombre, strLugarID, "REUNION", "ESRECURRENTE", eventoGoogleCreado.Status)
 
             respuesta = ctrlEvento.RegistrarEventoRecurrente(evento, lstAsistentes)
             If respuesta IsNot Nothing Then
@@ -113,7 +113,7 @@ Partial Class Nuevo_Evento
             Dim eventoGoogleCal = New EventoGoogleCalendar(strNombre, strDescripcion, datetimeInicio, datetimeFin, invitados)
             Dim eventoGoogleCreado = ctrlGoogleCalendario.RegistrarEventoSimple(eventoGoogleCal, serviciosRequeridos)
 
-            Dim evento As New Evento(eventoGoogleCreado.Id, Session("email"), strNombre, strLugarID, "REUNION", "NORECURRENTE")
+            Dim evento As New Evento(eventoGoogleCreado.Id, Session("email"), strNombre, strLugarID, "REUNION", "NORECURRENTE", eventoGoogleCreado.Status)
 
             Dim cita As New Cita(eventoGoogleCreado.Id, eventoGoogleCreado.Id, eventoGoogleCreado.Start.DateTime, eventoGoogleCreado.End.DateTime)
             respuesta = ctrlEvento.RegistrarEventoSimple(evento, lstAsistentes, cita)

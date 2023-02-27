@@ -130,9 +130,12 @@ Public Class ControladorEvento
             Dim rs = cmd.ExecuteReader()
 
             While rs.Read()
+
                 Dim google_CalUID = rs.GetValue(0)
+                Debug.WriteLine("Listando eventos dde " & google_CalUID)
                 'If ctrlGoogleCalendar.verificarEvento(google_CalUID) Then
                 'Debug.WriteLine("EVENTO SIN CANCELAR")
+                'Dim ev = Me.getEvento(google_CalUID)
                 lstStr.Add(google_CalUID)
                 'Else
                 'Debug.WriteLine("EVENTO CANCELADO")
@@ -140,13 +143,20 @@ Public Class ControladorEvento
 
 
             End While
+
             conn.close()
 
             For Each id In lstStr
-                Dim ev = Me.getEvento(id)
+                Dim eventoEnGoogle = ctrlGoogleCalendar.verificarEvento(id)
+                If eventoEnGoogle Then
+                    Dim ev = Me.getEvento(id)
+                    lst.Add(ev)
+                Else
 
-                lst.Add(ev)
+                End If
+
             Next
+
             Return lst
 
         Catch ex As Exception
@@ -162,10 +172,8 @@ Public Class ControladorEvento
         Dim lstOcurrences = ctrlGoogleCalendar.getCitasEvento(google_CalUID)
         Dim ev As New Evento()
 
-        If lstOcurrences Is Nothing Then
-            Return Nothing
-        Else
-            For Each ocurrence In lstOcurrences
+
+        For Each ocurrence In lstOcurrences
 
                 Dim cita As New Cita(google_CalUID, "", ocurrence.Start.DateTime, ocurrence.End.DateTime)
                 lstCitas.Add(cita)
@@ -178,57 +186,40 @@ Public Class ControladorEvento
                 Dim rs = cmd.ExecuteReader()
 
                 While rs.Read()
-                    ev = New Evento(rs.GetValue(0), rs.GetValue(2), rs.GetValue(3), rs.GetValue(1), rs.GetValue(4), rs.GetValue(5))
-                End While
+                ev = New Evento(rs.GetValue(0), rs.GetValue(2), rs.GetValue(3), rs.GetValue(1), rs.GetValue(4), rs.GetValue(5), rs.GetValue(6))
+            End While
                 conn.close()
-                'Debug.WriteLine("CONEXION CERRADA cantidad de citas ocurrences " + lstOcurrences.Count.ToString)
+                Debug.WriteLine("CONEXION CERRADA cantidad de citas ocurrences " + lstOcurrences.Count.ToString)
                 ev.evGoogle = ctrlGoogleCalendar.getEvento(google_CalUID)
                 ev.citas = lstCitas
             Catch ex As Exception
-                'Debug.WriteLine("Error obteniendo evento " + ex.Message)
-                Return Nothing
+            Debug.WriteLine("Error obteniendo evento " + ex.Message)
+            Return Nothing
             End Try
 
             Return ev
-        End If
+
 
 
 
     End Function
 
-    Friend Function verificarEventoBD(id_GoogleCalUID As String) As Boolean
+    Friend Function obtenerEventosXLugar(strLugarID As String) As List(Of Evento)
         Try
+            Dim lstEv As New List(Of Evento)
             conn.Open()
-            Dim cmd = New SqlCommand("SELECT * FROM EVENTO WHERE ID_GOOGLEICALUID=@ID_EVENTO AND ESTADO = 'confirmed' ", conn)
-            cmd.Parameters.AddWithValue("@ID_EVENTO", id_GoogleCalUID)
+            Dim cmd = New SqlCommand("SELECT * FROM EVENTO WHERE id_lugar = @EID_LUGAR ", conn)
+            cmd.Parameters.AddWithValue("@EID_LUGAR", strLugarID)
             Dim rs = cmd.ExecuteReader()
-            If rs.Read() Then
-                Return True
-            Else
-                Return False
-            End If
-            conn.close()
-        Catch ex As Exception
-            Debug.WriteLine("Error verificando evento en BD " + ex.Message)
-            Return Nothing
-        End Try
-    End Function
+            While rs.Read()
 
-    Friend Function updateEstado(id_GoogleCalUID As String) As String
-        Try
-            conn.Open()
-            Dim cmd = New SqlCommand("UPDATE FROM EVENTO SET ESTADO='cancelled' WHERE ID_GOOGLEICALUID=@ID_EVENTO ", conn)
-            cmd.Parameters.AddWithValue("@ID_EVENTO", id_GoogleCalUID)
-            Dim rs = cmd.ExecuteNonQuery
-
-            If rs > 0 Then
-                Return "Estado del evento actualizado en BD"
-            Else
-                Return "Estado del evento NO actualizado en BD"
-            End If
+                Dim e As New Evento(rs.GetValue(0), rs.GetValue(2), rs.GetValue(3), rs.GetValue(1), rs.GetValue(4), rs.GetValue(5), rs.GetValue(6))
+                lstEv.Add(e)
+            End While
             conn.close()
+            Return lstEv
         Catch ex As Exception
-            Debug.WriteLine("Error actualizando estado del evento en BD " + ex.Message)
+            Debug.WriteLine("Error en obtenerEventosXLugar " + ex.Message)
             Return Nothing
         End Try
     End Function

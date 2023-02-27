@@ -10,12 +10,14 @@ Imports Google.Apis.Services
 Imports Google.Apis.Auth.OAuth2
 Imports Google.Apis.Util.Store
 Imports System.Diagnostics
+Imports System.Data.SqlClient
 
 Public Class GoogleCalendarControlador
 
     Public Property calendarID As String
     Public Property service As CalendarService
-    Dim ctrlServLugarRec As New ControladorServicio_Recurso_Lugar()
+    '
+    Dim conn = New Conexion().conn
     'Dim ctrlEvento As New ControladorEvento()
 
     Public Sub New(strCalendarID As String)
@@ -117,6 +119,7 @@ Public Class GoogleCalendarControlador
     Public Function RegistrarEventoRecurrente(_evento As EventoGoogleCalendar, _horaInicio As String, _horaFin As String, _serviciosRequeridos As List(Of Servicio)) As Data.Event
 
         Dim ev = New Data.Event()
+        Dim ctrlServLugarRec As New ControladorServicio_Recurso_Lugar()
         Dim strDescripcionServicios = ctrlServLugarRec.ConstruirDetalleRecursos(_serviciosRequeridos)
         Try
             Dim start1 = New DateTime()
@@ -171,6 +174,7 @@ Public Class GoogleCalendarControlador
 
     Public Function RegistrarEventoSimple(_evento As EventoGoogleCalendar, _serviciosRequeridos As List(Of Servicio)) As Data.Event
         Dim ev = New Data.Event()
+        Dim ctrlServLugarRec As New ControladorServicio_Recurso_Lugar()
         Dim strDescripcionServicios = ctrlServLugarRec.ConstruirDetalleRecursos(_serviciosRequeridos)
 
         Try
@@ -215,6 +219,21 @@ Public Class GoogleCalendarControlador
             Debug.WriteLine(ex.Message)
             Return ev
         End Try
+    End Function
+
+    Friend Function verificarEvento(id_GoogleCalUID As String) As Boolean
+        Dim request = service.Events.Get(calendarID, id_GoogleCalUID)
+        Dim ev = request.Execute()
+        If ev.Status = "cancelled" Then
+            If Me.verificarEventoBD(id_GoogleCalUID) Then
+                Debug.WriteLine("Evento en estado confirmado ")
+                Dim rs = Me.updateEstado(id_GoogleCalUID)
+                Debug.WriteLine(rs)
+            End If
+            Return False
+            Else
+                Return True
+        End If
     End Function
 
     Public Function ListarEventos() As List(Of EventoGoogleCalendar)
@@ -265,18 +284,18 @@ Public Class GoogleCalendarControlador
         ' If verificarEvento(id_GoogleCalUID) Then
         Dim request = service.Events.Instances("primary", id_GoogleCalUID)
 
-            request.PageToken = Nothing
+        request.PageToken = Nothing
 
-            Dim events = request.Execute()
-
+        Dim events = request.Execute()
+        Debug.WriteLine("cantidad de eventos!!! " & events.Items.Count)
 
         For Each ev In events.Items
 
-            'Debug.WriteLine(ev.Id)
-            'Debug.WriteLine(ev.Start.DateTime)
+            Debug.WriteLine(ev.Id)
+            Debug.WriteLine(ev.Start.DateTime)
         Next
         Return events.Items
-            'Else
+        'Else
         ' Return Nothing
         'End If
 
@@ -293,4 +312,50 @@ Public Class GoogleCalendarControlador
     'Function addInvitadosServicios()
     '   service.Events.Update()
     'End Function
+
+
+    Function verificarEventoBD(id_GoogleCalUID As String) As Boolean
+        Try
+            conn.Open()
+            Dim cmd = New SqlCommand("SELECT * FROM EVENTO WHERE ID_GOOGLEICALUID=@ID_EVENTO AND ESTADO = 'confirmed' ", conn)
+            cmd.Parameters.AddWithValue("@ID_EVENTO", id_GoogleCalUID)
+            Dim rs = cmd.ExecuteReader()
+            If rs.Read() Then
+                conn.close()
+                Return True
+            Else
+                conn.close()
+                Return False
+            End If
+
+        Catch ex As Exception
+            Debug.WriteLine("Error verificando evento en BD " + ex.Message)
+            'conn.close()
+            Return Nothing
+        End Try
+
+    End Function
+
+    Function updateEstado(id_GoogleCalUID As String) As String
+        Try
+            conn.Open()
+            Dim cmd = New SqlCommand("UPDATE  EVENTO SET ESTADO='cancelled' WHERE ID_GOOGLEICALUID=@ID_EVENTO ", conn)
+            cmd.Parameters.AddWithValue("@ID_EVENTO", id_GoogleCalUID)
+            Dim rs = cmd.ExecuteNonQuery()
+
+            If rs > 0 Then
+                conn.close()
+                Return "Estado del evento actualizado en BD"
+            Else
+                conn.close()
+                Return "Estado del evento NO actualizado en BD"
+            End If
+
+        Catch ex As Exception
+            Debug.WriteLine("Error actualizando estado del evento en BD " + ex.Message)
+            Return Nothing
+        End Try
+
+    End Function
+
 End Class
