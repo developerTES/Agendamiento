@@ -379,11 +379,38 @@ Public Class ControladorServicio_Recurso_Lugar
         End Try
     End Function
 
-    Public Function comprobarInvitados(items As ListItemCollection, dateInicio As Date, dateFin As Date) As List(Of Asistente)
+    Public Function comprobarInvitados(strEmail As String, dateInicio As Date, dateFin As Date) As Boolean
         Try
 
-            Dim lstAsisAgendados As New List(Of Asistente)
+
             conn.Open()
+
+            Dim strSQL = "SELECT count(*) FROM  ASISTENTE_EVENTO  asis INNER JOIN EVENTO e ON asis.ID_GOOGLEICALUID = E.ID_GOOGLEICALUID 
+                                INNER JOIN CITA c on c.ID_GOOGLEICALUID = asis.ID_GOOGLEICALUID 
+                                WHERE asis.ID_ASISTENTE = @EID_ASISTENTE
+                                AND ESTADO = 'confirmed'
+                                AND  (C.DATE_INICIO BETWEEN @EDATE_INICIO and @EDATE_FIN
+                                OR  C.DATE_FIN BETWEEN @EDATE_INICIO and @EDATE_FIN )"
+
+            Dim cmd = New SqlCommand(strSQL, conn)
+
+            cmd.Parameters.AddWithValue("@EID_ASISTENTE", strEmail)
+            cmd.Parameters.AddWithValue("@EDATE_INICIO", dateInicio)
+            cmd.Parameters.AddWithValue("@EDATE_FIN", dateFin)
+
+            Dim ds = cmd.ExecuteReader()
+            While ds.Read()
+                If ds.GetValue(0) > 0 Then
+                    Debug.WriteLine("El asistente tiene reuniones en ese tiempo!!! " & strEmail)
+                    Return True
+
+                Else
+                    Debug.WriteLine("El asistente NO tiene reuniones en ese tiempo!!! " & strEmail)
+                    conn.close()
+                    Return False
+                End If
+            End While
+
         Catch ex As Exception
             Debug.WriteLine("Error comprobando invitados" + ex.Message)
             Return Nothing

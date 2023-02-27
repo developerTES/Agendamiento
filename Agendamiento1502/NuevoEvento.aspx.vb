@@ -167,15 +167,27 @@ Partial Class Nuevo_Evento
         Else
 
             cbxlInvitados.Items.Add(strEmail)
+            Dim cruce = comprobarInvitados(strEmail)
+            If cruce Then
+                Response.Write(msg.Mensajes(("El invitado tiene agendada una reunión en la fecha especificada !")))
+            Else
+
+            End If
+
             For Each i As ListItem In cbxlInvitados.Items
                 i.Selected = True
             Next
         End If
 
     End Sub
+
+
+
     Protected Sub btnRetirarSeleccionados_Click(sender As Object, e As EventArgs) Handles btnRetirarSeleccionados.Click
 
     End Sub
+
+
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
@@ -548,12 +560,12 @@ Partial Class Nuevo_Evento
 
     End Sub
 
-    Protected Sub comprobarInvitados()
-        Dim lstAgendados = ctrlServRecursoLugar.comprobarInvitados(cbxlInvitados.Items, Convert.ToDateTime(txtDatetimeInicio), Convert.ToDateTime(txtDatetimeFin))
-        If lstAgendados.Count < 0 Then
-            Response.Write(msg.Mensajes("Hay invitados que tienen reuniones en la fecha indicada"))
-        End If
-    End Sub
+
+
+    Private Function comprobarInvitados(strEmail As String) As Object
+        Dim cruce = ctrlServRecursoLugar.comprobarInvitados(strEmail, Convert.ToDateTime(txtDatetimeInicio.Text), Convert.ToDateTime(txtDatetimeFin.Text))
+        Return cruce
+    End Function
 
     Protected Sub txtDescripcionEvento_TextChanged(sender As Object, e As EventArgs) Handles txtDescripcionEvento.TextChanged
 
