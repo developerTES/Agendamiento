@@ -19,9 +19,8 @@
                 <h4>
                     <label for="lblServicio">Seleccione un servicio    </label>
                 </h4>
-                <asp:DropDownList ID="ddlServicios" runat="server" AutoPostBack="True" DataSourceID="SqlDataSource1" DataTextField="NOM_SERVICIO" DataValueField="ID_SERVICIO" CssClass="form-select">
+                <asp:DropDownList ID="ddlServicios" runat="server" AutoPostBack="True"  CssClass="form-select" >
                 </asp:DropDownList>
-                <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:AgendamientoConnectionString %>" SelectCommand="SELECT [ID_SERVICIO], [NOM_SERVICIO] FROM [SERVICIO]"></asp:SqlDataSource>
                 <br />
                 <br />
             </div>

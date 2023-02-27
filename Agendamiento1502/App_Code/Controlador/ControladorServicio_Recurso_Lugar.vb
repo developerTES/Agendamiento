@@ -229,7 +229,7 @@ Public Class ControladorServicio_Recurso_Lugar
         Dim lstServicios As New List(Of Servicio)
         Try
             conn.Open()
-            Dim strSQL = "SELECT * FROM SERVICIO"
+            Dim strSQL = "SELECT ID_SERVICIO, NOM_SERVICIO FROM SERVICIO"
             Dim cmd = New SqlCommand(strSQL, conn)
             Dim datareader = cmd.ExecuteReader()
             While datareader.Read()
@@ -341,7 +341,7 @@ Public Class ControladorServicio_Recurso_Lugar
             Dim bool = datareader.Read()
             If bool Then
                 Dim citas As New List(Of Cita)
-                Dim cita As New Cita(datareader.GetValue(0), datareader.GetValue(7), datareader.GetValue(8), datareader.GetValue(9))
+                Dim cita As New Cita(datareader.GetValue(0), datareader.GetValue(8), datareader.GetValue(9), datareader.GetValue(10))
                 citas.Add(cita)
                 Dim ev As New Evento(datareader.GetValue(0), datareader.GetValue(2), datareader.GetValue(3), datareader.GetValue(1), datareader.GetValue(4), datareader.GetValue(5), citas)
 
@@ -351,7 +351,7 @@ Public Class ControladorServicio_Recurso_Lugar
             End If
 
         Catch ex As Exception
-            Debug.WriteLine("ERROR EN OBTENER LUGAR " & ex.Message)
+            Debug.WriteLine("ERROR EN verificar disponibilidad " & ex.Message)
             Return "ERROR verificar disponibilidad " & ex.Message
         End Try
     End Function

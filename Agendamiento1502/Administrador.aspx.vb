@@ -42,10 +42,19 @@ Partial Class Administrador
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         Session("lugares") = ctrlServRecursoLugar.obtenerLugares()
+        Session("servicios") = ctrlServRecursoLugar.obtenerServicios()
         Session("recursos") = ctrlServRecursoLugar.obtenerRecursos(ddlServicios.SelectedValue)
         If Not IsPostBack Then
             Dim columna = New ButtonField With {.HeaderText = "Accion", .CommandName = "EditarLugar", .Text = "Editar"}
             gvLugares.Columns.Insert(0, columna)
+            Dim serv = ctrlServRecursoLugar.obtenerServicios()
+            For Each s In serv
+                ddlServicios.Items.Add(New ListItem(s.id_Servicio, s.nom_servicio))
+            Next
+            'ddlServicios.DataSource = ctrlServRecursoLugar.obtenerServicios()
+            'ddlServicios.DataTextField()
+            'ddlServicios.DataBind()
+
         End If
 
         'Dim lstLugares = ctrlServRecursoLugar.obtenerLugares()

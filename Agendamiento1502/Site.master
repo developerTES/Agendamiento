@@ -141,24 +141,7 @@
         </div>
     </form>
 
-    <script type="text/javascript" src="https://checkout.epayco.co/checkout.js"
-        class = "epayco-button"
-        data-epayco-key='7c0e3cb9905cc6924cfa41bd822306cf' 
-                data-epayco-private-key = '3d1d87bb853a61cd897ff62994f55240'
-       
-                data-epayco-amount='10000' 
-                data-epayco-tax='10'
-                data-epayco-tax-ico='NaN'                
-                data-epayco-tax-base='10'
-                data-epayco-name='Musica' 
-                data-epayco-description='Musica' 
-                data-epayco-currency='cop'    
-                data-epayco-country='CO' 
-                data-epayco-test='true' 
-                data-epayco-external='false' 
-        >
-        
-    </script>
+    
 
 
     <!--ELIMINAR EN CASO EXTRAÑO-->

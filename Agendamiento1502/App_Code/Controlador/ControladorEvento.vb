@@ -22,6 +22,7 @@ Public Class ControladorEvento
             cmd.Parameters.AddWithValue("@EID_cITA", 1)
             cmd.Parameters.AddWithValue("@ENOM_EVENTO", evento.nom_Evento)
             cmd.Parameters.AddWithValue("@EEMAIL_organizador", evento.email_organizador)
+            cmd.Parameters.AddWithValue("@E_ESTADO", "confirmed") 'o cancelled'
             Debug.WriteLine(cita.date_inicio)
             Debug.WriteLine(cita.date_fin)
             cmd.Parameters.AddWithValue("@DATE_INICIO", cita.date_inicio)
@@ -32,6 +33,7 @@ Public Class ControladorEvento
 
                 Try
                     For Each asistente In lstAsistentes
+                        Debug.WriteLine("Asistent e ID" & asistente.email_asistente, evento.id_GoogleCalUID)
                         Dim cmd2 As New SqlCommand With {.Connection = conn}
                         cmd2.CommandType = CommandType.StoredProcedure
                         cmd2.CommandText = "registrarAsistenteEvento"
@@ -41,7 +43,7 @@ Public Class ControladorEvento
                     Next
                     Return "Se pudo crear el evento, asistentes notificados"
                 Catch ex As Exception
-                    Debug.WriteLine("ERROR EN REGISTRAREVENTOSIMPLE " & ex.Message)
+                    Debug.WriteLine("ERROR EN REGISTRAR ASISTENTES EVENTOSIMPLE " & ex.Message & ex.StackTrace)
                     Return Nothing
                 End Try
 
@@ -69,6 +71,7 @@ Public Class ControladorEvento
             cmd.Parameters.AddWithValue("@ERECURRENCIA", evento.strRecurrencia)
             cmd.Parameters.AddWithValue("@ENOM_EVENTO", evento.nom_Evento)
             cmd.Parameters.AddWithValue("@EEMAIL_organizador", evento.email_organizador)
+            cmd.Parameters.AddWithValue("@E_ESTADO", "confirmed") 'o cancelled'
             Dim rs = cmd.ExecuteNonQuery()
             If rs > 0 Then
 
