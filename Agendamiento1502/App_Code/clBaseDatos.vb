@@ -29,7 +29,7 @@ Public Class clBaseDatos
         Return cnConexion
     End Function
     Public Function fxAbrir_Conexion_Novasoft() As SqlConnection
-        Dim strConexion As String = "Persist Security Info=False;Integrated Security=SSPI;database=Novasoft;server=" & strServidor & ";connect timeout=30"
+        Dim strConexion As String = "Persist Security Info=False;Integrated Security=SSPI;database=Novasoft;server=" & strServidor & ";connect timeout=5"
         Dim cnConexion As New SqlConnection(strConexion)
         cnConexion.Open()
         Return cnConexion

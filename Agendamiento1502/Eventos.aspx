@@ -9,6 +9,9 @@
     <hr />
     <% Dim ctrlServLug As New ControladorServicio_Recurso_Lugar()  %>
     <% Dim ctrlCalGoogle As New GoogleCalendarControlador("primary")  %>
+
+
+
     <h2><strong> Eventos Organizados por <%:Session("user") %> </strong></h2>
     <br />
     <%If Session("lst_org") IsNot Nothing Then %>
@@ -67,7 +70,7 @@
                     <h5 class="card-title"><strong>Descripción </strong>  </h5>
                     <p class="card-text"><%: e.evGoogle.Description.Split("<br><br>")(0) %></p>
                     <p class="card-text"><a href = "<%:e.evGoogle.HtmlLink  %>" Class="card-link" target="_blank" >Ver Evento en Google Calendar</a>
-                    <a href = "#" Class="card-link">Editar</a></p>
+                    <a href = "#" Class="card-link">Editar</ a></p>
                 </div>
             </div>
         </div>

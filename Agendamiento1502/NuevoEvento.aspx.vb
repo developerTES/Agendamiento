@@ -201,9 +201,16 @@ Partial Class Nuevo_Evento
             'ddlLugar.Items(0).Selected = True
             'Dim mycollection As New AutoCompleteStringCollection()
             Dim ctrlAsistente As New ControladorAsistente()
-            'Dim lstPersonalTES = ctrlAsistente.getEmailsPersonalTES()
+            Dim lstPersonalTES = ctrlAsistente.getEmailsPersonalTES()
+            For Each asis As Asistente In lstPersonalTES
+                Dim lstItem As New ListItem()
+                lstItem.Value = asis.email_asistente
+                lstItem.Text = asis.nom_asistente
+                ddlEmailTES.Items.Add(lstItem)
+            Next
             'ddlEmailTES.DataSource = lstPersonalTES
-            ' ddlEmailTES.DataBind()
+
+            'ddlEmailTES.DataBind()
         End If
 
         'cargarCamposRepitencia(False)

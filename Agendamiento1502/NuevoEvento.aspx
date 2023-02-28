@@ -196,8 +196,8 @@
                         </div>
 
                         <asp:TextBox ID="txtInvitado" runat="server" TextMode="Email" CssClass="form-control" ></asp:TextBox>
-                        <asp:DropDownList ID="ddlEmailTES" runat="server" CssClass="form-control"></asp:DropDownList>
-                        <asp:Button ID="btnAgregarInvitado" runat="server" CssClass="btn btn-secondary" Text="Agregar Invitado" />
+                        <asp:DropDownList ID="ddlEmailTES" runat="server" CssClass="form-control" Width="200"></asp:DropDownList>
+                        <asp:Button ID="btnAgregarInvitado" runat="server" CssClass="btn btn-secondary" Text="Agregar Invitado"  />
                         <asp:Button ID="btnRetirarSeleccionados" runat="server" Text="Retirar Seleccionados" CssClass="btn btn-secondary" />
 
                     
