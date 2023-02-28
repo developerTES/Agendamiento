@@ -121,7 +121,7 @@ Partial Class Nuevo_Evento
 
                 Debug.WriteLine(respuesta)
                 Dim res = ctrlServRecursoLugar.registrarRecursosRequeridos(evento, serviciosRequeridos)
-                Response.Write(msg.Mensajes(respuesta))
+                Response.Write(msg.Mensajes(respuesta & " " & res))
 
                 'Response.Redirect("Eventos.aspx")
             Else
@@ -193,7 +193,7 @@ Partial Class Nuevo_Evento
 
 
         If Not Me.IsPostBack Then
-            Me.BindRepeater()
+            'Me.BindRepeater()
             Dim lstLugares = ctrlServRecursoLugar.obtenerLugares()
             ddlLugar.DataSource = lstLugares
             ddlLugar.DataBind()
@@ -253,16 +253,13 @@ Partial Class Nuevo_Evento
 
     End Sub
 
-    Private Function obtenerServiciosRequeridos() As List(Of Servicio)
-        'Session("lstServicios") = lstServicios
-        Dim servicioActual = ""
-        'Dim lstServRecursos As New List(Of List(Of Recurso))
-        Dim lstServRecursos As New List(Of Servicio)
-        Dim s As New Servicio()
-        Dim r As New List(Of Recurso)
-        'lstServRecursos.Add(New List(Of String))
-        ' lstServRecursos.Add(New List(Of String))
 
+    Private Function obtenerServiciosRequeridos() As List(Of Servicio)
+
+        Dim lstServRecursos As New List(Of Servicio)
+
+
+        Dim r As New List(Of Recurso)
         Dim lstRecursosServicios As New List(Of String)
 
         For Each control In Request.Form
@@ -271,53 +268,42 @@ Partial Class Nuevo_Evento
                 lstRecursosServicios.Add(control)
             End If
         Next
-
         For i As Integer = 0 To lstRecursosServicios.Count - 1 Step 2
             Dim idServ = lstRecursosServicios(i).Split("_")(1)
             Dim idRec = lstRecursosServicios(i + 1).Split("_")(2)
-            If servicioActual <> idServ Then
+            If Request.Form(lstRecursosServicios(i)) > 0 Then
+                If lstServRecursos.Count = 0 Then
+                    Dim s = ctrlServRecursoLugar.obtenerServicio(idServ)
+                    s.email_responsable = ctrlServRecursoLugar.obtenerEmailsServicio(idServ)
+                    Dim miRec = ctrlServRecursoLugar.obtenerRecurso(idServ, idRec)
+                    miRec.setDetallesRecurso(Request.Form(lstRecursosServicios(i)).ToString & ".  " & Request.Form(lstRecursosServicios(i + 1).ToString))
+                    s.recursos.Add(miRec)
+                    lstServRecursos.Add(s)
+                Else
+                    Dim existe = False
+                    For Each s In lstServRecursos
+                        If s.id_Servicio = idServ Then
+                            existe = True
+                            Dim miRec = ctrlServRecursoLugar.obtenerRecurso(s.id_Servicio, idRec)
+                            miRec.setDetallesRecurso(Request.Form(lstRecursosServicios(i)).ToString & ".  " & Request.Form(lstRecursosServicios(i + 1).ToString))
+                            s.recursos.Add(miRec)
 
-                If servicioActual <> "" Then
-                    s.recursos = r
-                    If s.recursos.Count <> 0 Then
-                        lstServRecursos.Add(s)
-
+                        End If
+                    Next
+                    If Not existe Then
+                        Dim serv = ctrlServRecursoLugar.obtenerServicio(idServ)
+                        serv.email_responsable = ctrlServRecursoLugar.obtenerEmailsServicio(idServ)
+                        Dim miRec = ctrlServRecursoLugar.obtenerRecurso(idServ, idRec)
+                        miRec.setDetallesRecurso(Request.Form(lstRecursosServicios(i)).ToString & ".  " & Request.Form(lstRecursosServicios(i + 1).ToString))
+                        serv.recursos.Add(miRec)
+                        lstServRecursos.Add(serv)
                     End If
-                    r = New List(Of Recurso)
-
                 End If
-
-                servicioActual = idServ
-
-                s = ctrlServRecursoLugar.obtenerServicio(servicioActual)
-                Debug.WriteLine("SERVICIO")
-
-            Else
-
             End If
-
-
-            Dim miRec = ctrlServRecursoLugar.obtenerRecurso(servicioActual, idRec)
-            Debug.WriteLine(" rec " & servicioActual & idRec & ": " & Request.Form(lstRecursosServicios(i)) & "DESC " & Request.Form(lstRecursosServicios(i + 1)))
-            miRec.setDetallesRecurso(Request.Form(lstRecursosServicios(i)).ToString & ".  " & Request.Form(lstRecursosServicios(i + 1).ToString))
-            If Integer.Parse(Request.Form(lstRecursosServicios(i))) > 0 Then
-                r.Add(miRec)
-            Else
-                Debug.WriteLine("CANT Y DESCR VACIOS")
-            End If
-
-
-
 
         Next
-        Try
-            If s.recursos.Count <> 0 Then
-                lstServRecursos.Add(s)
 
-            End If
-        Catch ex As Exception
 
-        End Try
         Debug.WriteLine(lstServRecursos.Count & " Cantidad de servicios requeridos y rec")
         For Each servicio In lstServRecursos
             Debug.WriteLine("SERVICIO ------- " & servicio.nom_servicio)
@@ -327,8 +313,11 @@ Partial Class Nuevo_Evento
             Next
         Next
 
+
+
         Return lstServRecursos
     End Function
+
 
     Protected Sub cargarCamposNoRepitencia(ByVal estado As Boolean)
         'cbxlRepitencia.Items.FindByValue("No se repite").Selected = Not estado

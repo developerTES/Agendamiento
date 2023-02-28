@@ -198,7 +198,7 @@ Public Class ControladorServicio_Recurso_Lugar
     End Function
 
     Public Function ConstruirDetalleRecursos(serviciosRequeridos As List(Of Servicio)) As String
-        Dim strDetalles = "<br><br><br><br><hr> SE REQUIEREN LOS SERVICIOS. "
+        Dim strDetalles = "<br><br><br><br><hr> SE REQUIEREN LOS SERVICIOS. <br> "
         For Each serv In serviciosRequeridos
             strDetalles += "Servicio <strong> " & serv.nom_servicio & " </strong> <br>"
             For Each rec In serv.recursos
@@ -296,7 +296,7 @@ Public Class ControladorServicio_Recurso_Lugar
                 Dim S As New Servicio(datareader.GetValue(0), datareader.GetValue(1))
                 conn.close()
                 S.email_responsable = Me.obtenerEmailsServicio(idServ)
-
+                S.recursos = New List(Of Recurso)
                 Return S
             Else
                 conn.close()
