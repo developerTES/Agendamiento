@@ -133,29 +133,24 @@ Public Class ControladorEvento
 
                 Dim google_CalUID = rs.GetValue(0)
                 Debug.WriteLine("Listando eventos dde " & google_CalUID)
-                'If ctrlGoogleCalendar.verificarEvento(google_CalUID) Then
-                'Debug.WriteLine("EVENTO SIN CANCELAR")
-                'Dim ev = Me.getEvento(google_CalUID)
-                lstStr.Add(google_CalUID)
-                'Else
-                'Debug.WriteLine("EVENTO CANCELADO")
-                'End If
+                If ctrlGoogleCalendar.verificarEvento(google_CalUID) Then
+                    Debug.WriteLine("EVENTO SIN CANCELAR")
+                    Dim c As New Cita(rs.GetValue(0), rs.GetValue(8), rs.GetValue(9), rs.GetValue(10))
+                    Debug.WriteLine("CITA ES " & c.id_GoogleICalUID & c.date_inicio)
+                    Dim lstCitas As New List(Of Cita)
+                    lstCitas.Add(c)
+                    Dim e As New Evento(rs.GetValue(0), rs.GetValue(2), rs.GetValue(3), rs.GetValue(1), rs.GetValue(4), rs.GetValue(5), rs.GetValue(6), lstCitas, ctrlGoogleCalendar.getEvento(rs.GetValue(0)))
+                    lst.Add(e)
+                Else
+                    Debug.WriteLine("EVENTO CANCELADO")
+                End If
 
 
             End While
 
             conn.close()
 
-            For Each id In lstStr
-                Dim eventoEnGoogle = ctrlGoogleCalendar.verificarEvento(id)
-                If eventoEnGoogle Then
-                    Dim ev = Me.getEvento(id)
-                    lst.Add(ev)
-                Else
 
-                End If
-
-            Next
 
             Return lst
 
@@ -168,36 +163,32 @@ Public Class ControladorEvento
 
 
     Function getEvento(google_CalUID As String) As Evento
-        Dim lstCitas As New List(Of Cita)
-        Dim lstOcurrences = ctrlGoogleCalendar.getCitasEvento(google_CalUID)
+
+        Dim ctrlCita As New ControladorCita()
+        Dim lstCitas = ctrlCita.obtenerCitasEvento(google_CalUID)
+
         Dim ev As New Evento()
 
 
-        For Each ocurrence In lstOcurrences
+        Try
+            conn.Open()
+            Dim cmd = New SqlCommand("SELECT * FROM EVENTO WHERE ID_GOOGLEICALUID=@ID", conn)
+            cmd.Parameters.AddWithValue("@ID", google_CalUID)
+            Dim rs = cmd.ExecuteReader()
 
-                Dim cita As New Cita(google_CalUID, "", ocurrence.Start.DateTime, ocurrence.End.DateTime)
-                lstCitas.Add(cita)
-            Next
-
-            Try
-                conn.Open()
-                Dim cmd = New SqlCommand("SELECT * FROM EVENTO WHERE ID_GOOGLEICALUID=@ID", conn)
-                cmd.Parameters.AddWithValue("@ID", google_CalUID)
-                Dim rs = cmd.ExecuteReader()
-
-                While rs.Read()
+            While rs.Read()
                 ev = New Evento(rs.GetValue(0), rs.GetValue(2), rs.GetValue(3), rs.GetValue(1), rs.GetValue(4), rs.GetValue(5), rs.GetValue(6))
             End While
-                conn.close()
-                Debug.WriteLine("CONEXION CERRADA cantidad de citas ocurrences " + lstOcurrences.Count.ToString)
-                ev.evGoogle = ctrlGoogleCalendar.getEvento(google_CalUID)
-                ev.citas = lstCitas
-            Catch ex As Exception
+            conn.close()
+
+            ev.evGoogle = ctrlGoogleCalendar.getEvento(google_CalUID)
+            ev.citas = lstCitas
+        Catch ex As Exception
             Debug.WriteLine("Error obteniendo evento " + ex.Message)
             Return Nothing
-            End Try
+        End Try
 
-            Return ev
+        Return ev
 
 
 

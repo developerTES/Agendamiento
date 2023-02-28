@@ -37,4 +37,25 @@ Public Class ControladorCita
         End Try
 
     End Function
+
+    Friend Function obtenerCitasEvento(google_CalUID As String) As List(Of Cita)
+        Try
+            Dim lstCita As New List(Of Cita)
+            conn.Open()
+            Dim strSQL = "SELECT * FROM CITA WHERE ID_GOOGLEICALUID = @EID_GOOGLEICALUID"
+            Dim cmd = New SqlCommand(strSQL, conn)
+            cmd.Parameters.AddWithValue("@EID_GOOGLEICALUID", google_CalUID)
+
+            Dim ds = cmd.ExecuteReader()
+            While ds.Read()
+                Dim c As New Cita(ds.GetValue(0), ds.GetValue(1), ds.GetValue(2), ds.GetValue(3))
+                lstCita.Add(c)
+            End While
+            conn.close()
+            Return lstCita
+        Catch ex As Exception
+            Debug.WriteLine("Error en obtener citas de evento " & ex.Message)
+            Return Nothing
+        End Try
+    End Function
 End Class
