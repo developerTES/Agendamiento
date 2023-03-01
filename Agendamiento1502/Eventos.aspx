@@ -38,9 +38,34 @@
                                 <%End if %>
                         </div>
                         <div class="card-body">
-
+                            <p class="card-body "><%:e.evGoogle.Description  %></p>
                         </div>
                         <div class="card-footer">
+                            
+                            
+                            <a href=" <%:e.evGoogle.HtmlLink  %>" class="btn btn-success" target="_blank">Ver en Calendar</a>
+                            <a class="btn btn-danger" runat="server" id="btnCancelarEvento" value="<%:e.id_GoogleCalUID %>" name="<%:e.id_GoogleCalUID %>" autopostback="false">Cancelar Evento</a>
+                            <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" autopostback="false" OnClientClick="$('#exampleModal').modal()" CssClass="btn btn-danger" />
+                            <asp:Button ID="btnOpenModal" runat="server" Text="Open Modal" CssClass="btn btn-primary" />
+                            <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal<%:e.id_GoogleCalUID  %>">Cancelar Evento</button>
+
+                            <div id="myModal<%:e.id_GoogleCalUID  %>" class="modal in" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Modal Header <%:e.id_GoogleCalUID  %></h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Modal Body</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
 
                         </div>
                     </div>
@@ -165,6 +190,8 @@
     <h4>No hay eventos agendados</h4>
         <%End If%>
 
+
+    
     
     
 </asp:Content>

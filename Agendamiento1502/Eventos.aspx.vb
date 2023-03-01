@@ -26,6 +26,7 @@ Partial Class Eventos
             Else
                 Response.Redirect("Default")
             End If
+
         End If
 
 
@@ -33,7 +34,12 @@ Partial Class Eventos
         ' Debug.WriteLine(Session("culture").ToString)
     End Sub
 
-
+    Private Sub btnCancelarClick(sender As Object, e As EventArgs) Handles btnCancelarEvento.ServerClick
+        Debug.WriteLine("Eliminar evento " & sender.GetType.ToString)
+        Dim btn = CType(sender, HtmlAnchor)
+        Dim name = btn.Name
+        Debug.WriteLine("Valor del boton " & name)
+    End Sub
 
 
 
