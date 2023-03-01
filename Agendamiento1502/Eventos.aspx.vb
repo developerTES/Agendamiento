@@ -1,6 +1,7 @@
 ﻿
 Imports System.Diagnostics
 Imports System.Net
+Imports System.Web.Services
 
 Partial Class Eventos
     Inherits System.Web.UI.Page
@@ -34,17 +35,25 @@ Partial Class Eventos
         ' Debug.WriteLine(Session("culture").ToString)
     End Sub
 
-    Private Sub btnCancelarClick(sender As Object, e As EventArgs) Handles btnCancelarEvento.ServerClick
-        Debug.WriteLine("Eliminar evento " & sender.GetType.ToString)
-        Dim btn = CType(sender, HtmlAnchor)
-        Dim name = btn.Name
-        Debug.WriteLine("Valor del boton " & name)
-    End Sub
+
+    <System.Web.Services.WebMethod()>
+    Public Shared Function GetCurrentTime()
+        'Public Shared Function GetCurrentTime(ByVal name As String) As String
+        Debug.WriteLine("Hola Mundo ")
+        'Return "Hello " & name & Environment.NewLine & "The Current Time is: " &
+        'DateTime.Now.ToString()
+    End Function
+
+    <WebMethod>
+    Public Shared Function PrintGoogleCAL(id As String) As String
+        Debug.WriteLine("Hola Munmdo cal")
+        Debug.WriteLine(id)
+        Return "Exitoso"
+    End Function
 
 
 
-
-    Private Sub ListardetalleEvento(sender As Object, e As EventArgs)
+    Private Sub ListardetalleEvento(ByVal idGoogleCal As String)
         Debug.WriteLine("Hola Mundo")
 
     End Sub

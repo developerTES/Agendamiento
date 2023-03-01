@@ -2,6 +2,7 @@
 Imports System.Diagnostics
 Imports System.Globalization
 Imports System.Threading
+Imports System.Web.Services
 
 Partial Class _Default
     Inherits Page
@@ -50,4 +51,31 @@ Partial Class _Default
 
 
     End Sub
+
+    <WebMethod()>
+    Public Shared Function AddProductToCart(pID As String) As String
+
+        Debug.WriteLine("Error en add product ")
+        'Dim selectedProduct As String = String.Format("+ {0} - {1} - {2}", pID)
+
+        'HttpContext.Current.Session("test") += selectedProduct
+
+        Return pID
+
+    End Function
+
+    <WebMethod()>
+    Public Shared Function GetData(ByVal ID As String) As String
+        Debug.WriteLine("Hola Mundo")
+        'Return ID
+        Return "VALOR DESDE LA FUNCION"
+    End Function
+
+    <WebMethod()>
+    Public Shared Function GetText(ByVal Text As String) As String
+        Debug.WriteLine("Hola Mundooooo ")
+        Return "Mi texto es " & Text
+    End Function
+
+
 End Class

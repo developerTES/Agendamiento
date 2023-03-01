@@ -29,11 +29,12 @@
             background-size: 100%;
         }
     </style>
-
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>   
 </head>
 <body>
+    
     <form runat="server">
-        <asp:ScriptManager runat="server">
+        <asp:ScriptManager runat="server"  EnablePageMethods="true">
             <Scripts>
                 <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
                 <%--Framework Scripts--%>

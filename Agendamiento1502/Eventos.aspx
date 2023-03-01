@@ -27,6 +27,7 @@
                     <%If Session("lst_org") IsNot Nothing %>
                     <%For each e As Evento In Session("lst_org")%>
 
+                    
                     <div class="card">
                         <div class ="card-header">
                             <h4 class="card-title"><%:e.nom_Evento  %> </h4>
@@ -44,20 +45,54 @@
                             
                             
                             <a href=" <%:e.evGoogle.HtmlLink  %>" class="btn btn-success" target="_blank">Ver en Calendar</a>
-                            <a class="btn btn-danger" runat="server" id="btnCancelarEvento" value="<%:e.id_GoogleCalUID %>" name="<%:e.id_GoogleCalUID %>" autopostback="false">Cancelar Evento</a>
-                            <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" autopostback="false" OnClientClick="$('#exampleModal').modal()" CssClass="btn btn-danger" />
-                            <asp:Button ID="btnOpenModal" runat="server" Text="Open Modal" CssClass="btn btn-primary" />
-                            <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal<%:e.id_GoogleCalUID  %>">Cancelar Evento</button>
+                            
+                            
+                            <asp:button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal<%:e.id_GoogleCalUID  %>">Cancelar Evento</asp:button>
 
                             <div id="myModal<%:e.id_GoogleCalUID  %>" class="modal in" role="dialog">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title">Modal Header <%:e.id_GoogleCalUID  %></h4>
+                                            <h4 class="modal-title">Cancelar Evento <%:e.nom_Evento%> </h4>
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Modal Body</p>
+                                            <div class="form-check ">
+                                            <h1><%:e.nom_Evento%></h1>
+                                            <p><%:e.evGoogle.Description.Split("<br><br>")(0) %></p>
+                                            <h3><%:e.citas(0).date_inicio.ToString("m") %> - <%:e.citas(0).date_inicio.ToString("m") %> </h3>
+                                            <h3><%:ctrlServLug.obtenerLugar(e.id_lugar).nom_lugar  %></h3>
+                                             
+                                            <hr />
+                                            <br />
+                                            </div>
+                                            <%Dim idGoogle = e.id_GoogleCalUID  %>
+                                            <button type="submit" class="btn btn-danger" id="btnCancelarDef" onclick='ShowCurrentTime()'>Cancelar</button>
+                                            <script type="text/javascript">
+                                                
+                                                function ShowCurrentTime() {
+                                                    
+                                                    var num1 = $<%:e.id_GoogleCalUID %>
+                                                   
+                                                    //alert("Hola Mundo desde AJAX <%:e.id_GoogleCalUID %>")
+                                                     alert("Hola Mundo desde AJAX "+ num1)
+                                                    $.ajax({
+                                                        type: "POST",
+                                                        url: "Eventos.aspx/PrintGoogleCAL",
+                                                        data:  "{'id':'" + num1 + "'}",
+                                                        contentType: "application/json; charset=utf-8",
+                                                        dataType: "json",
+                                                        success: OnSuccess,
+                                                        failure: function (response) {
+                                                           alert("Failure");
+                                                        }
+                                                    });
+                                                }
+                                                function OnSuccess(response) {
+                                                    //alert(response.d);
+                                                    alert("SUCCESS");
+                                                }
+                                            </script>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -69,6 +104,7 @@
 
                         </div>
                     </div>
+                        
                     <% Next %>
                     <%else %>
                     <h4>No hay eventos agendados</h4>
@@ -192,6 +228,8 @@
 
 
     
-    
+    <script runat="server">
+
+</script>
     
 </asp:Content>
