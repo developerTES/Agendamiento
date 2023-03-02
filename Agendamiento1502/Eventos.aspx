@@ -68,7 +68,7 @@
                                             </div>
                                             <%Dim idGoogle = e.id_GoogleCalUID  %>
                                             
-                                            <button type="submit" class="btn btn-danger" id="btnCancelarDef" onclick="ShowCurrentTime('<%:e.id_GoogleCalUID  %>')">Cancelar</button>
+                                            <button type="submit" class="btn btn-danger" id="btnCancelarDef" onclick="cancelarEvento('<%:e.id_GoogleCalUID  %>')">Cancelar</button>
                                             
 
 
@@ -211,16 +211,16 @@
 
     <script type="text/javascript">
 
-        function ShowCurrentTime(id) {
+        function cancelarEvento(id) {
 
 
-            alert("Hola Mundo desde AJAX ")
+            //alert("Hola Mundo desde AJAX ")
             $.ajax({
                 type: "POST",
                 async: false,
-                url: "Eventos.aspx/PrintGoogleCAL",
+                url: "Eventos.aspx/cancelarEvento",
 
-                data: "{'str': '" +id+ "'}",
+                data: "{'idGoogleCalUID': '" +id+ "'}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: OnSuccess,

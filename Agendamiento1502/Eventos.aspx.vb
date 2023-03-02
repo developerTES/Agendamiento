@@ -7,7 +7,7 @@ Imports Newtonsoft.Json
 
 Partial Class Eventos
     Inherits System.Web.UI.Page
-    Dim ctrlEventos As New ControladorEvento()
+    Public Property ctrlEventos As New ControladorEvento()
 
 
 
@@ -56,12 +56,14 @@ Partial Class Eventos
         Return "Evento cancelado " & str
     End Function
 
+    <WebMethod>
+    Public Shared Function cancelarEvento(idGoogleCalUID As String) As String
+        'Dim response = cancelarEvento(idGoogleCalUID)
+        Dim ctrlEv As New ControladorEvento()
+        Dim response = ctrlEv.cancelarEventoSimple(idGoogleCalUID)
+        Return response
+    End Function
 
-
-    Private Sub ListardetalleEvento(ByVal idGoogleCal As String)
-        Debug.WriteLine("Hola Mundo")
-
-    End Sub
 
 
 

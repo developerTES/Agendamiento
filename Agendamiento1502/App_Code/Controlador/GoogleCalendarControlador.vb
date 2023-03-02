@@ -116,6 +116,19 @@ Public Class GoogleCalendarControlador
 
     End Function
 
+    Public Function cancelarEvento(idGoogleCalUID As String) As Boolean
+        Try
+            Dim request = service.Events.Delete(calendarID, idGoogleCalUID).Execute()
+            Debug.WriteLine(request)
+            Return True
+        Catch ex As Exception
+            Debug.WriteLine("error cancelando evento " & ex.Message)
+            Return False
+        End Try
+
+
+    End Function
+
     Public Function RegistrarEventoRecurrente(_evento As EventoGoogleCalendar, _horaInicio As String, _horaFin As String, _serviciosRequeridos As List(Of Servicio)) As Data.Event
 
         Dim ev = New Data.Event()

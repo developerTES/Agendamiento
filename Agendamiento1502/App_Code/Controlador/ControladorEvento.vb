@@ -61,6 +61,34 @@ Public Class ControladorEvento
         End Try
     End Function
 
+    Public Function cancelarEventoSimple(idGoogleCalUID As String) As String
+        Dim response = ctrlGoogleCalendar.cancelarEvento(idGoogleCalUID)
+        If response Then
+            Try
+                conn.Open()
+                Dim strSQL = "DELETE FROM EVENTO WHERE ID_GOOGLEICALUID = @EID_GOOGLEICALUID "
+                Dim cmd = New SqlCommand(strSQL, conn)
+                cmd.Parameters.AddWithValue("@EID_GOOGLEICALUID", idGoogleCalUID)
+                Dim rs = cmd.ExecuteNonQuery()
+                If rs > 0 Then
+                    conn.close()
+                    Return "Evento cancelado!! "
+                Else
+                    conn.close()
+                    Return "No se pudo cancelar el evento "
+                End If
+
+            Catch ex As Exception
+                Debug.WriteLine("Error cancelando el evento simple BD " & ex.Message)
+                Return "No se pudo cancelar el evento"
+            End Try
+
+        Else
+            Return "No se pudo cancelar el evento "
+        End If
+
+    End Function
+
     Public Function RegistrarEventoRecurrente(evento As Evento, lstAsistentes As List(Of Asistente)) As String
         Try
             conn.Open()
