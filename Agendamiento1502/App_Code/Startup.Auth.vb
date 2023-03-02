@@ -9,10 +9,14 @@ Partial Public Class Startup
         ' Habilitar la aplicación para que use una cookie para almacenar la información del usuario que inició sesión
         ' y almacenar también información acerca de un usuario que inicie sesión con un proveedor de inicio de sesión de un tercero.
         ' Es obligatorio si la aplicación permite a los usuarios iniciar sesión
+
         app.UseCookieAuthentication(New CookieAuthenticationOptions() With {
         .AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-        .LoginPath = New PathString("/Account/Login")})
+        .LoginPath = New PathString("/Default")})
         app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie)
+
+        'app.UseCookieAuthentication(New CookieAuthenticationOptions())
+        'p.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie)
 
         ' Quitar las marcas de comentario de las líneas siguientes para habilitar el inicio de sesión con proveedores de inicio de sesión de terceros
         'app.UseMicrosoftAccountAuthentication(

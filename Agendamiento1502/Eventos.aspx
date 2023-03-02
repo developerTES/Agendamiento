@@ -36,7 +36,7 @@
                                 <h6 class="card-text l-6"><%:e.citas(0).date_inicio.ToString("hh:mm tt") %> - <%:e.citas(0).date_fin.ToString("hh:mm tt") %>  </h6>
                                 <%else %>
                                 <h5 class="card-text l-5"><strong>Lugar y Fecha:  </strong><%:ctrlServLug.obtenerLugar(e.id_lugar).nom_lugar  %>  -  (<%:e.citas(0).date_inicio %> - <%:e.citas(0).date_inicio.ToString("hh:mm tt")%> - <%e.citas(0).date_fin.ToString("hh:mm")%>)</h5>
-                                <%End if %>
+                                <%End If %>
                         </div>
                         <div class="card-body">
                             <p class="card-body "><%:e.evGoogle.Description  %></p>
@@ -72,27 +72,37 @@
                                                 
                                                 function ShowCurrentTime() {
                                                     
-                                                    var num1 = $<%:e.id_GoogleCalUID %>
                                                    
-                                                    //alert("Hola Mundo desde AJAX <%:e.id_GoogleCalUID %>")
-                                                     alert("Hola Mundo desde AJAX "+ num1)
+                                                     alert("Hola Mundo desde AJAX ")
                                                     $.ajax({
                                                         type: "POST",
+                                                        async:false,
                                                         url: "Eventos.aspx/PrintGoogleCAL",
-                                                        data:  "{'id':'" + num1 + "'}",
+                                                        
+                                                        data: "{'str':'<%:idGoogle%>'}",
                                                         contentType: "application/json; charset=utf-8",
                                                         dataType: "json",
                                                         success: OnSuccess,
                                                         failure: function (response) {
                                                            alert("Failure");
+                                                        },
+                                                        error: function (jqXhr, textStatus, errorThrown) {
+                                                            console.log(errorThrown);
                                                         }
                                                     });
                                                 }
                                                 function OnSuccess(response) {
                                                     //alert(response.d);
+                                                    var result = response.d;
                                                     alert("SUCCESS");
+                                                    alert(result);
                                                 }
                                             </script>
+
+
+                                            <asp:HiddenField ID="HiddenField1" runat="server" Value='<%:idGoogle%>' />
+                                            <asp:LinkButton ID="lnkBtn" runat="server" CommandArgument='<%:idGoogle%>' Text="Cancelar?????" autopostback="true" />
+                                            
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

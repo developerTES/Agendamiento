@@ -55,7 +55,7 @@ Partial Class _Default
     <WebMethod()>
     Public Shared Function AddProductToCart(pID As String) As String
 
-        Debug.WriteLine("Error en add product ")
+        Console.WriteLine("Error en add product ")
         'Dim selectedProduct As String = String.Format("+ {0} - {1} - {2}", pID)
 
         'HttpContext.Current.Session("test") += selectedProduct
@@ -66,16 +66,12 @@ Partial Class _Default
 
     <WebMethod()>
     Public Shared Function GetData(ByVal ID As String) As String
-        Debug.WriteLine("Hola Mundo")
+        Console.WriteLine("Hola Mundo")
         'Return ID
         Return "VALOR DESDE LA FUNCION"
     End Function
 
-    <WebMethod()>
-    Public Shared Function GetText(ByVal Text As String) As String
-        Debug.WriteLine("Hola Mundooooo ")
-        Return "Mi texto es " & Text
-    End Function
+
 
 
 End Class

@@ -48,16 +48,9 @@
                 <asp:Button ID="btnLogin" runat="server" Text="Login" />
                 <br />
                 <input type="button" id="btnAddToCart"/>
-                <input type="button" id="theBtn" onclick="ShowText()" value="Go" />
+                <input type="button" id="theBtn"  value="Go" />
+                <asp:HiddenField ID="HiddenValue" runat="server" />
                 
-                <script type="text/javascript">
-        function ShowText() {
-            PageMethods.GetText("Hola Mundo", OnSuccess);
-        }
-        function OnSuccess(response) {
-            alert(response);
-        }
-    </script>
                 <asp:Label ID="lblPath" runat="server" Visible="False"></asp:Label>
             </td>
         </tr>
@@ -79,50 +72,28 @@
     </table>
 
  
-   <script type="text/javascript">
-
-        $(function () {
-            $('#btnAddToCart').click(function () {
-                alert("Hola Mundo")
-                var result = $.ajax({
-                    type: "POST",
-                    url: "Default.aspx/AddProductToCart",
-                    data: '{ pID: "1833" }',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: succeeded,
-                    failure: function (msg) {
-                        alert(msg);
-                    },
-                    error: function (xhr, err) {
-                        alert(err);
-                    }
-                });
-            });
-        });
-
-        function succeeded(msg) {
-            alert(msg.d);
-        }
-    
-    </script>
 
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <script type="text/javascript">
         $(function () {
             $("#theBtn").click(function () {
-                $.post({
-                    url: 'Default.aspx/GetData',
+                $.ajax({
                     type: 'POST',
+                    //url: 'Default.aspx/GetData',
+                    url: 'Default.aspx/GetData',
+                    
                     //using get all textbox selector-you can use a different selector
-                    data: '{"ID": "5" }',
+                    data: '{ID: 5 }',
                     contentType: "application/json; charset=utf-8",
-                    dataType: "json",
+                    //beforeSend: function (xhr) { xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); },
+                    //dataType: "json",
+                    //crossDomain:true,
                     success: function (data, textStatus, jQxhr) {
                         //don't forget the .d
                         alert("sssss " + data.textStatus);
                         alert("sssss " + data);
-                        console.log("Exito")
+                        console.log("Exito");
+                        console.log(data);
                     },
                     error: function (jqXhr, textStatus, errorThrown) {
                         console.log(errorThrown);

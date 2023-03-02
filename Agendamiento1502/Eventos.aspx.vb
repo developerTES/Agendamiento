@@ -1,7 +1,9 @@
 ﻿
 Imports System.Diagnostics
 Imports System.Net
+Imports System.Web.Script.Services
 Imports System.Web.Services
+Imports Newtonsoft.Json
 
 Partial Class Eventos
     Inherits System.Web.UI.Page
@@ -36,19 +38,20 @@ Partial Class Eventos
     End Sub
 
 
-    <System.Web.Services.WebMethod()>
-    Public Shared Function GetCurrentTime()
-        'Public Shared Function GetCurrentTime(ByVal name As String) As String
-        Debug.WriteLine("Hola Mundo ")
-        'Return "Hello " & name & Environment.NewLine & "The Current Time is: " &
-        'DateTime.Now.ToString()
-    End Function
+    Protected Sub btnCancelarClick(sender As Object, e As EventArgs) Handles lnkBtn.Click
+        Dim btn = CType(sender, LinkButton)
+        Debug.WriteLine("ARGUMENTO DEL BOTON ES ------------------------------------------------------------------------")
+        Debug.WriteLine(btn.CommandArgument)
+    End Sub
+
 
     <WebMethod>
-    Public Shared Function PrintGoogleCAL(id As String) As String
+    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
+    Public Shared Function PrintGoogleCAL(str As String) As String
         Debug.WriteLine("Hola Munmdo cal")
-        Debug.WriteLine(id)
-        Return "Exitoso"
+        Debug.WriteLine(str)
+        Dim json = JsonConvert.SerializeObject("Evento cancelado " & str)
+        Return json
     End Function
 
 
