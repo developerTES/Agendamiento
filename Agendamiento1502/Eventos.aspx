@@ -67,37 +67,9 @@
                                             <br />
                                             </div>
                                             <%Dim idGoogle = e.id_GoogleCalUID  %>
-                                            <button type="submit" class="btn btn-danger" id="btnCancelarDef" onclick='ShowCurrentTime()'>Cancelar</button>
-                                            <script type="text/javascript">
-                                                
-                                                function ShowCurrentTime() {
-                                                    
-                                                   
-                                                     alert("Hola Mundo desde AJAX ")
-                                                    $.ajax({
-                                                        type: "POST",
-                                                        async:false,
-                                                        url: "Eventos.aspx/PrintGoogleCAL",
-                                                        
-                                                        data: "{'str':'<%:idGoogle%>'}",
-                                                        contentType: "application/json; charset=utf-8",
-                                                        dataType: "json",
-                                                        success: OnSuccess,
-                                                        failure: function (response) {
-                                                           alert("Failure");
-                                                        },
-                                                        error: function (jqXhr, textStatus, errorThrown) {
-                                                            console.log(errorThrown);
-                                                        }
-                                                    });
-                                                }
-                                                function OnSuccess(response) {
-                                                    //alert(response.d);
-                                                    var result = response.d;
-                                                    alert("SUCCESS");
-                                                    alert(result);
-                                                }
-                                            </script>
+                                            
+                                            <button type="submit" class="btn btn-danger" id="btnCancelarDef" onclick="ShowCurrentTime('<%:e.id_GoogleCalUID  %>')">Cancelar</button>
+                                            
 
 
                                             <asp:HiddenField ID="HiddenField1" runat="server" Value='<%:idGoogle%>' />
@@ -237,9 +209,35 @@
         <%End If%>
 
 
-    
-    <script runat="server">
+    <script type="text/javascript">
 
-</script>
+        function ShowCurrentTime(id) {
+
+
+            alert("Hola Mundo desde AJAX ")
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "Eventos.aspx/PrintGoogleCAL",
+
+                data: "{'str': '" +id+ "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccess,
+                failure: function (response) {
+                    alert("Failure");
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+        }
+        function OnSuccess(response) {
+            //alert(response.d);
+            var result = response.d;
+            alert("SUCCESS");
+            alert(result);
+        }
+    </script>
     
 </asp:Content>

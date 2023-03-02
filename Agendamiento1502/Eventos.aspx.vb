@@ -45,13 +45,15 @@ Partial Class Eventos
     End Sub
 
 
+
+    '<ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
     <WebMethod>
-    <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
     Public Shared Function PrintGoogleCAL(str As String) As String
         Debug.WriteLine("Hola Munmdo cal")
         Debug.WriteLine(str)
         Dim json = JsonConvert.SerializeObject("Evento cancelado " & str)
-        Return json
+        'Return json
+        Return "Evento cancelado " & str
     End Function
 
 
